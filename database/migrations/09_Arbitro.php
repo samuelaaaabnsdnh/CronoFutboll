@@ -6,19 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-  
     public function up(): void
     {
-        Schema::table('arbitro', function (Blueprint $table) {
-            //
+        Schema::create('arbitros', function (Blueprint $table) {
+            $table->id();
+            $table->string("nombre", 100);
+            $table->string("apellido", 100);
+            $table->string("documento", 30)->unique();
+            $table->string("telefono", 20)->nullable();
+            $table->string("correo", 150)->nullable();
+            $table->integer("experiencia")->nullable();
+            $table->string("estado", 20);
         });
     }
-
-    
     public function down(): void
     {
-        Schema::table('arbitro', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists("arbitros");
     }
 };

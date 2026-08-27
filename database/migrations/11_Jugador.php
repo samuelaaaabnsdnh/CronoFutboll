@@ -6,23 +6,28 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::table('jugador', function (Blueprint $table) {
-            //
+        Schema::create('jugadores', function (Blueprint $table) {
+            $table->id();
+
+            $table->unsignedBigInteger("equipo_id");
+
+            $table->string("nombre", 100);
+            $table->string("apellido", 100);
+            $table->string("documento", 30)->unique();
+            $table->date("fecha_nacimiento");
+            $table->string("posicion", 50)->nullable();
+            $table->integer("numero_camiseta")->nullable();
+            $table->string("telefono", 20)->nullable();
+            $table->string("estado", 20);
+
+            $table->foreign("equipo_id")->references("id")->on("equipos")->onDelete("cascade");
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::table('jugador', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists("jugadores");
     }
 };
