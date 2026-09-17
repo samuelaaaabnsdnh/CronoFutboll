@@ -4,26 +4,25 @@ namespace App\Repositories;
 
 use App\Interfaces\NotificacionRepositoryInterface;
 use App\Models\Notificacion;
-use Illuminate\Database\Eloquent\Collection;
 
 class NotificacionRepository implements NotificacionRepositoryInterface
 {
-    public function all(): Collection
-    {
-        return Notificacion::all();
-    }
-
-    public function find(int $id): ?Notificacion
-    {
-        return Notificacion::find($id);
-    }
-
-    public function create(array $data): Notificacion
+    public function create(array $data)
     {
         return Notificacion::create($data);
     }
 
-    public function update(int $id, array $data): ?Notificacion
+    public function getAll()
+    {
+        return Notificacion::all();
+    }
+
+    public function getById(int $id)
+    {
+        return Notificacion::find($id);
+    }
+
+    public function update(array $data, int $id)
     {
         $notificacion = Notificacion::find($id);
 
@@ -36,7 +35,7 @@ class NotificacionRepository implements NotificacionRepositoryInterface
         return $notificacion;
     }
 
-    public function delete(int $id): bool
+    public function delete(int $id)
     {
         $notificacion = Notificacion::find($id);
 
