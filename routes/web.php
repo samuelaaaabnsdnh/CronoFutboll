@@ -1,7 +1,5 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RolPermisoController;
 
-Route::get('/', function () {
-    return view('welcome');
-});

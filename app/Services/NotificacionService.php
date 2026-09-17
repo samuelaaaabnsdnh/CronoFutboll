@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use App\Interfaces\NotificacionRepositoryInterface;
-use App\Models\Notificacion;
-use Illuminate\Database\Eloquent\Collection;
 
 class NotificacionService
 {
@@ -15,24 +13,24 @@ class NotificacionService
         $this->notificacionRepository = $notificacionRepository;
     }
 
-    public function listar(): Collection
+    public function listar()
     {
-        return $this->notificacionRepository->all();
+        return $this->notificacionRepository->getAll();
     }
 
-    public function buscar(int $id): ?Notificacion
+    public function buscar(int $id)
     {
-        return $this->notificacionRepository->find($id);
+        return $this->notificacionRepository->getById($id);
     }
 
-    public function crear(array $data): Notificacion
+    public function crear(array $data)
     {
         return $this->notificacionRepository->create($data);
     }
 
-    public function actualizar(int $id, array $data): ?Notificacion
+    public function actualizar(int $id, array $data)
     {
-        return $this->notificacionRepository->update($id, $data);
+        return $this->notificacionRepository->update($data, $id);
     }
 
     public function eliminar(int $id): bool

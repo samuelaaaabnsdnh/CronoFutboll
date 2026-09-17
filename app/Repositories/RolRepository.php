@@ -4,26 +4,25 @@ namespace App\Repositories;
 
 use App\Interfaces\RolRepositoryInterface;
 use App\Models\Rol;
-use Illuminate\Database\Eloquent\Collection;
 
 class RolRepository implements RolRepositoryInterface
 {
-    public function all(): Collection
-    {
-        return Rol::all();
-    }
-
-    public function find(int $id): ?Rol
-    {
-        return Rol::find($id);
-    }
-
-    public function create(array $data): Rol
+    public function create(array $data)
     {
         return Rol::create($data);
     }
 
-    public function update(int $id, array $data): ?Rol
+    public function getAll()
+    {
+        return Rol::all();
+    }
+
+    public function getById(int $id)
+    {
+        return Rol::find($id);
+    }
+
+    public function update(array $data, int $id)
     {
         $rol = Rol::find($id);
 
@@ -36,7 +35,7 @@ class RolRepository implements RolRepositoryInterface
         return $rol;
     }
 
-    public function delete(int $id): bool
+    public function delete(int $id)
     {
         $rol = Rol::find($id);
 
