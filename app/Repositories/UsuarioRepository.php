@@ -4,26 +4,25 @@ namespace App\Repositories;
 
 use App\Interfaces\UsuarioRepositoryInterface;
 use App\Models\Usuario;
-use Illuminate\Database\Eloquent\Collection;
 
 class UsuarioRepository implements UsuarioRepositoryInterface
 {
-    public function all(): Collection
-    {
-        return Usuario::all();
-    }
-
-    public function find(int $id): ?Usuario
-    {
-        return Usuario::find($id);
-    }
-
-    public function create(array $data): Usuario
+    public function create(array $data)
     {
         return Usuario::create($data);
     }
 
-    public function update(int $id, array $data): ?Usuario
+    public function getAll()
+    {
+        return Usuario::all();
+    }
+
+    public function getById(int $id)
+    {
+        return Usuario::find($id);
+    }
+
+    public function update(array $data, int $id)
     {
         $usuario = Usuario::find($id);
 
@@ -36,7 +35,7 @@ class UsuarioRepository implements UsuarioRepositoryInterface
         return $usuario;
     }
 
-    public function delete(int $id): bool
+    public function delete(int $id)
     {
         $usuario = Usuario::find($id);
 

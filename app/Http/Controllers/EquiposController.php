@@ -21,7 +21,7 @@ class EquiposController extends Controller
         return view('equipos.create');
     }
 
-    public function store(StoreEquipoRequest $request)
+    public function store(StoreEquiposRequest $request)
     {
         $data = $request->validated();
         $data['fecha_registro'] = now();
@@ -36,7 +36,7 @@ class EquiposController extends Controller
         return view('equipos.edit', compact('equipo'));
     }
 
-    public function update(UpdateEquipoRequest $request, Equipos $equipo)
+    public function update(UpdateEquiposRequest $request, Equipos $equipo)
     {
         $equipo->update($request->validated());
 

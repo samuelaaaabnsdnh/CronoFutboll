@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use App\Interfaces\PermisoRepositoryInterface;
-use App\Models\Permiso;
-use Illuminate\Database\Eloquent\Collection;
 
 class PermisoService
 {
@@ -15,24 +13,24 @@ class PermisoService
         $this->permisoRepository = $permisoRepository;
     }
 
-    public function listar(): Collection
+    public function listar()
     {
-        return $this->permisoRepository->all();
+        return $this->permisoRepository->getAll();
     }
 
-    public function buscar(int $id): ?Permiso
+    public function buscar(int $id)
     {
-        return $this->permisoRepository->find($id);
+        return $this->permisoRepository->getById($id);
     }
 
-    public function crear(array $data): Permiso
+    public function crear(array $data)
     {
         return $this->permisoRepository->create($data);
     }
 
-    public function actualizar(int $id, array $data): ?Permiso
+    public function actualizar(int $id, array $data)
     {
-        return $this->permisoRepository->update($id, $data);
+        return $this->permisoRepository->update($data, $id);
     }
 
     public function eliminar(int $id): bool

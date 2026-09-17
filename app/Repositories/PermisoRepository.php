@@ -4,26 +4,25 @@ namespace App\Repositories;
 
 use App\Interfaces\PermisoRepositoryInterface;
 use App\Models\Permiso;
-use Illuminate\Database\Eloquent\Collection;
 
 class PermisoRepository implements PermisoRepositoryInterface
 {
-    public function all(): Collection
-    {
-        return Permiso::all();
-    }
-
-    public function find(int $id): ?Permiso
-    {
-        return Permiso::find($id);
-    }
-
-    public function create(array $data): Permiso
+    public function create(array $data)
     {
         return Permiso::create($data);
     }
 
-    public function update(int $id, array $data): ?Permiso
+    public function getAll()
+    {
+        return Permiso::all();
+    }
+
+    public function getById(int $id)
+    {
+        return Permiso::find($id);
+    }
+
+    public function update(array $data, int $id)
     {
         $permiso = Permiso::find($id);
 
@@ -36,7 +35,7 @@ class PermisoRepository implements PermisoRepositoryInterface
         return $permiso;
     }
 
-    public function delete(int $id): bool
+    public function delete(int $id)
     {
         $permiso = Permiso::find($id);
 

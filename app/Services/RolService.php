@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use App\Interfaces\RolRepositoryInterface;
-use App\Models\Rol;
-use Illuminate\Database\Eloquent\Collection;
 
 class RolService
 {
@@ -15,24 +13,24 @@ class RolService
         $this->rolRepository = $rolRepository;
     }
 
-    public function listar(): Collection
+    public function listar()
     {
-        return $this->rolRepository->all();
+        return $this->rolRepository->getAll();
     }
 
-    public function buscar(int $id): ?Rol
+    public function buscar(int $id)
     {
-        return $this->rolRepository->find($id);
+        return $this->rolRepository->getById($id);
     }
 
-    public function crear(array $data): Rol
+    public function crear(array $data)
     {
         return $this->rolRepository->create($data);
     }
 
-    public function actualizar(int $id, array $data): ?Rol
+    public function actualizar(int $id, array $data)
     {
-        return $this->rolRepository->update($id, $data);
+        return $this->rolRepository->update($data, $id);
     }
 
     public function eliminar(int $id): bool

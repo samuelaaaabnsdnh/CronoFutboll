@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use App\Interfaces\UsuarioRepositoryInterface;
-use App\Models\Usuario;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Hash;
 
 class UsuarioService
@@ -16,24 +14,24 @@ class UsuarioService
         $this->usuarioRepository = $usuarioRepository;
     }
 
-    public function listar(): Collection
+    public function listar()
     {
-        return $this->usuarioRepository->all();
+        return $this->usuarioRepository->getAll();
     }
 
-    public function buscar(int $id): ?Usuario
+    public function buscar(int $id)
     {
-        return $this->usuarioRepository->find($id);
+        return $this->usuarioRepository->getById($id);
     }
 
-    public function crear(array $data): Usuario
+    public function crear(array $data)
     {
         $data['password'] = Hash::make($data['password']);
 
         return $this->usuarioRepository->create($data);
     }
 
-    public function actualizar(int $id, array $data): ?Usuario
+    public function actualizar(int $id, array $data)
     {
         if (! empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
@@ -41,7 +39,7 @@ class UsuarioService
             unset($data['password']);
         }
 
-        return $this->usuarioRepository->update($id, $data);
+        return $this->usuarioRepository->update($data, $id);
     }
 
     public function eliminar(int $id): bool

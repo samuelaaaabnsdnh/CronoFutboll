@@ -1,5 +1,5 @@
 <?php
-// app/Http/Controllers/TorneosController.php
+
 
 namespace App\Http\Controllers;
 
@@ -21,7 +21,7 @@ class TorneosController extends Controller
         return view('torneos.create');
     }
 
-    public function store(StoreTorneoRequest $request)
+    public function store(StoreTorneosRequest $request)
     {
         Torneos::create($request->validated());
 
@@ -33,7 +33,7 @@ class TorneosController extends Controller
         return view('torneos.edit', compact('torneo'));
     }
 
-    public function update(UpdateTorneoRequest $request, Torneos $torneo)
+    public function update(UpdateTorneosRequest $request, Torneos $torneo)
     {
         $torneo->update($request->validated());
 
