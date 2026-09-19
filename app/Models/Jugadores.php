@@ -10,8 +10,10 @@ class Jugadores extends Model
     use HasFactory;
 
     protected $table="jugadores";
+    public $timestamps = false;
 
-    protected $fillable =[
+    protected $fillable = [
+        'equipo_id',
         'nombre',
         'apellido',
         'documento',
@@ -20,7 +22,6 @@ class Jugadores extends Model
         'numero_camiseta',
         'telefono',
         'estado',
-    
     ];
 
     protected $casts = [

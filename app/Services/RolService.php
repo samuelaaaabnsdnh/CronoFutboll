@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
-use App\Interfaces\RolRepositoryInterface;
+use App\Interfaces\RolInterface;
 
 class RolService
 {
-    protected RolRepositoryInterface $rolRepository;
+    protected RolInterface $rolRepository;
 
-    public function __construct(RolRepositoryInterface $rolRepository)
+    public function __construct(RolInterface $rolRepository)
     {
         $this->rolRepository = $rolRepository;
     }

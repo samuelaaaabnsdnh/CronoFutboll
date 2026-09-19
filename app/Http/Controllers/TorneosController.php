@@ -1,49 +1,59 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreTorneosRequest;
-use App\Http\Requests\UpdateTorneosRequest;
-use App\Models\Torneos;
+use App\Http\Requests\Torneos\StoreTorneosRequest;
+use App\Http\Requests\Torneos\UpdateTorneosRequest;
+use App\Services\TorneoService;
 
 class TorneosController extends Controller
 {
-    public function index()
+    public function __construct(private TorneoService $torneoService)
     {
-        $torneos = Torneos::orderBy('fecha_inicio', 'desc')->paginate(10);
-
-        return view('torneos.index', compact('torneos'));
     }
 
-    public function create()
+    public function index()
     {
-        return view('torneos.create');
+        return response()->json([
+            'success' => 'se listaron correctamente',
+            'data' => $this->torneoService->list()
+        ]);
     }
 
     public function store(StoreTorneosRequest $request)
     {
-        Torneos::create($request->validated());
+        $registroInsertado = $this->torneoService->store($request->validated());
 
-        return redirect()->route('torneos.index')->with('success', 'Torneo creado correctamente.');
+        return response()->json([
+            'success' => 'torneo se creó correctamente',
+            'data' => $registroInsertado
+        ]);
     }
 
-    public function edit(Torneos $torneo)
+    public function show(int $id)
     {
-        return view('torneos.edit', compact('torneo'));
+        return response()->json([
+            'success' => 'se encontró el torneo',
+            'data' => $this->torneoService->show($id)
+        ]);
     }
 
-    public function update(UpdateTorneosRequest $request, Torneos $torneo)
+    public function update(UpdateTorneosRequest $request, int $id)
     {
-        $torneo->update($request->validated());
+        $registroActualizado = $this->torneoService->update($id, $request->validated());
 
-        return redirect()->route('torneos.index')->with('success', 'Torneo actualizado correctamente.');
+        return response()->json([
+            'success' => 'torneo se actualizó correctamente',
+            'data' => $registroActualizado
+        ]);
     }
 
-    public function destroy(Torneos $torneo)
+    public function destroy(int $id)
     {
-        $torneo->delete();
+        $this->torneoService->destroy($id);
 
-        return redirect()->route('torneos.index')->with('success', 'Torneo eliminado correctamente.');
+        return response()->json([
+            'success' => 'torneo se eliminó correctamente'
+        ]);
     }
 }

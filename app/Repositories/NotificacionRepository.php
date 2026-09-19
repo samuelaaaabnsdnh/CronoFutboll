@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\NotificacionRepositoryInterface;
+use App\Interfaces\NotificacionInterface;
 use App\Models\Notificacion;
 
-class NotificacionRepository implements NotificacionRepositoryInterface
+class NotificacionRepository implements NotificacionInterface
 {
     public function create(array $data)
     {

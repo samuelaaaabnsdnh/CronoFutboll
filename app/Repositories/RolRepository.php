@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\RolRepositoryInterface;
+use App\Interfaces\RolInterface;
 use App\Models\Rol;
 
-class RolRepository implements RolRepositoryInterface
+class RolRepository implements RolInterface
 {
     public function create(array $data)
     {

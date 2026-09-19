@@ -8,50 +8,52 @@ use App\Services\ConvocatoriaJugadorService;
 
 class ConvocatoriaJugadorController extends Controller
 {
-    protected ConvocatoriaJugadorService $convocatoriaJugadorService;
-
-    public function __construct(ConvocatoriaJugadorService $convocatoriaJugadorService)
+    public function __construct(private ConvocatoriaJugadorService $convocatoriaJugadorService)
     {
-        $this->convocatoriaJugadorService = $convocatoriaJugadorService;
     }
 
     public function index()
     {
-        $convocatoriaJugadores = $this->convocatoriaJugadorService->list();
-
-        return view('convocatoria_jugador.index', compact('convocatoriaJugadores'));
-    }
-
-    public function create()
-    {
-        return view('convocatoria_jugador.create');
+        return response()->json([
+            'success' => 'se listaron correctamente',
+            'data' => $this->convocatoriaJugadorService->list()
+        ]);
     }
 
     public function store(StoreConvocatoriaJugadorRequest $request)
     {
-        $this->convocatoriaJugadorService->store($request->validated());
+        $registroInsertado = $this->convocatoriaJugadorService->store($request->validated());
 
-        return redirect()->route('convocatoria_jugador.index')->with('success', 'Jugador convocado correctamente.');
+        return response()->json([
+            'success' => 'jugador convocado correctamente',
+            'data' => $registroInsertado
+        ]);
     }
 
-    public function edit(int $id)
+    public function show(int $id)
     {
-        $convocatoriaJugador = $this->convocatoriaJugadorService->show($id);
-
-        return view('convocatoria_jugador.edit', compact('convocatoriaJugador'));
+        return response()->json([
+            'success' => 'se encontró la convocatoria del jugador',
+            'data' => $this->convocatoriaJugadorService->show($id)
+        ]);
     }
 
     public function update(UpdateConvocatoriaJugadorRequest $request, int $id)
     {
-        $this->convocatoriaJugadorService->update($id, $request->validated());
+        $registroActualizado = $this->convocatoriaJugadorService->update($id, $request->validated());
 
-        return redirect()->route('convocatoria_jugador.index')->with('success', 'Convocatoria de jugador actualizada correctamente.');
+        return response()->json([
+            'success' => 'convocatoria de jugador se actualizó correctamente',
+            'data' => $registroActualizado
+        ]);
     }
 
     public function destroy(int $id)
     {
         $this->convocatoriaJugadorService->destroy($id);
 
-        return redirect()->route('convocatoria_jugador.index')->with('success', 'Jugador removido de la convocatoria.');
+        return response()->json([
+            'success' => 'jugador removido de la convocatoria'
+        ]);
     }
 }

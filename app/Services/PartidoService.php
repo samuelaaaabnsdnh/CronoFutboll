@@ -1,10 +1,10 @@
 <?php
 namespace App\Services;
-use App\Interfaces\PartidoRepositoryInterface;
+use App\Interfaces\PartidoInterface;
 class PartidoService
 {
     public function __construct(
-        private PartidoRepositoryInterface $partidoRepository
+        private PartidoInterface $partidoRepository
     ){}
     public function list()
     {

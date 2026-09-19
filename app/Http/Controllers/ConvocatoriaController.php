@@ -8,50 +8,52 @@ use App\Services\ConvocatoriaService;
 
 class ConvocatoriaController extends Controller
 {
-    protected ConvocatoriaService $convocatoriaService;
-
-    public function __construct(ConvocatoriaService $convocatoriaService)
+    public function __construct(private ConvocatoriaService $convocatoriaService)
     {
-        $this->convocatoriaService = $convocatoriaService;
     }
 
     public function index()
     {
-        $convocatorias = $this->convocatoriaService->list();
-
-        return view('convocatorias.index', compact('convocatorias'));
-    }
-
-    public function create()
-    {
-        return view('convocatorias.create');
+        return response()->json([
+            'success' => 'se listaron correctamente',
+            'data' => $this->convocatoriaService->list()
+        ]);
     }
 
     public function store(StoreConvocatoriaRequest $request)
     {
-        $this->convocatoriaService->store($request->validated());
+        $registroInsertado = $this->convocatoriaService->store($request->validated());
 
-        return redirect()->route('convocatorias.index')->with('success', 'Convocatoria creada correctamente.');
+        return response()->json([
+            'success' => 'convocatoria se creó correctamente',
+            'data' => $registroInsertado
+        ]);
     }
 
-    public function edit(int $id)
+    public function show(int $id)
     {
-        $convocatoria = $this->convocatoriaService->show($id);
-
-        return view('convocatorias.edit', compact('convocatoria'));
+        return response()->json([
+            'success' => 'se encontró la convocatoria',
+            'data' => $this->convocatoriaService->show($id)
+        ]);
     }
 
     public function update(UpdateConvocatoriaRequest $request, int $id)
     {
-        $this->convocatoriaService->update($id, $request->validated());
+        $registroActualizado = $this->convocatoriaService->update($id, $request->validated());
 
-        return redirect()->route('convocatorias.index')->with('success', 'Convocatoria actualizada correctamente.');
+        return response()->json([
+            'success' => 'convocatoria se actualizó correctamente',
+            'data' => $registroActualizado
+        ]);
     }
 
     public function destroy(int $id)
     {
         $this->convocatoriaService->destroy($id);
 
-        return redirect()->route('convocatorias.index')->with('success', 'Convocatoria eliminada correctamente.');
+        return response()->json([
+            'success' => 'convocatoria se eliminó correctamente'
+        ]);
     }
 }

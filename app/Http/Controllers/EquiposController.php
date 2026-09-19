@@ -1,52 +1,62 @@
 <?php
-// app/Http/Controllers/EquiposController.php
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreEquiposRequest;
-use App\Http\Requests\UpdateEquiposRequest;
-use App\Models\Equipos;
+use App\Http\Requests\Equipos\StoreEquiposRequest;
+use App\Http\Requests\Equipos\UpdateEquiposRequest;
+use App\Services\EquipoService;
 
 class EquiposController extends Controller
 {
-    public function index()
+    public function __construct(private EquipoService $equipoService)
     {
-        $equipos = Equipos::orderBy('nombre')->paginate(10);
-
-        return view('equipos.index', compact('equipos'));
     }
 
-    public function create()
+    public function index()
     {
-        return view('equipos.create');
+        return response()->json([
+            'success' => 'se listaron correctamente',
+            'data' => $this->equipoService->list()
+        ]);
     }
 
     public function store(StoreEquiposRequest $request)
     {
         $data = $request->validated();
-        $data['fecha_registro'] = now();
+        $data['fecha_registro'] = $data['fecha_registro'] ?? now();
 
-        Equipos::create($data);
+        $registroInsertado = $this->equipoService->store($data);
 
-        return redirect()->route('equipos.index')->with('success', 'Equipo registrado correctamente.');
+        return response()->json([
+            'success' => 'equipo se creó correctamente',
+            'data' => $registroInsertado
+        ]);
     }
 
-    public function edit(Equipos $equipo)
+    public function show(int $id)
     {
-        return view('equipos.edit', compact('equipo'));
+        return response()->json([
+            'success' => 'se encontró el equipo',
+            'data' => $this->equipoService->show($id)
+        ]);
     }
 
-    public function update(UpdateEquiposRequest $request, Equipos $equipo)
+    public function update(UpdateEquiposRequest $request, int $id)
     {
-        $equipo->update($request->validated());
+        $registroActualizado = $this->equipoService->update($id, $request->validated());
 
-        return redirect()->route('equipos.index')->with('success', 'Equipo actualizado correctamente.');
+        return response()->json([
+            'success' => 'equipo se actualizó correctamente',
+            'data' => $registroActualizado
+        ]);
     }
 
-    public function destroy(Equipos $equipo)
+    public function destroy(int $id)
     {
-        $equipo->delete();
+        $this->equipoService->destroy($id);
 
-        return redirect()->route('equipos.index')->with('success', 'Equipo eliminado correctamente.');
+        return response()->json([
+            'success' => 'equipo se eliminó correctamente'
+        ]);
     }
 }

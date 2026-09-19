@@ -11,6 +11,8 @@ class Arbitros extends Model
 
     protected $table="arbitros";
 
+    public $timestamps = false;
+
     protected $fillable =[
         'nombre',
         'apellido',

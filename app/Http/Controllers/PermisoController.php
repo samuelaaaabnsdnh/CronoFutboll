@@ -8,50 +8,52 @@ use App\Services\PermisoService;
 
 class PermisoController extends Controller
 {
-    protected PermisoService $permisoService;
-
-    public function __construct(PermisoService $permisoService)
+    public function __construct(private PermisoService $permisoService)
     {
-        $this->permisoService = $permisoService;
     }
 
     public function index()
     {
-        $permisos = $this->permisoService->listar();
-
-        return view('permisos.index', compact('permisos'));
-    }
-
-    public function create()
-    {
-        return view('permisos.create');
+        return response()->json([
+            'success' => 'se listaron correctamente',
+            'data' => $this->permisoService->listar()
+        ]);
     }
 
     public function store(StorePermisoRequest $request)
     {
-        $this->permisoService->crear($request->validated());
+        $registroInsertado = $this->permisoService->crear($request->validated());
 
-        return redirect()->route('permisos.index')->with('success', 'Permiso creado correctamente.');
+        return response()->json([
+            'success' => 'permiso se creó correctamente',
+            'data' => $registroInsertado
+        ]);
     }
 
-    public function edit(int $id)
+    public function show(int $id)
     {
-        $permiso = $this->permisoService->buscar($id);
-
-        return view('permisos.edit', compact('permiso'));
+        return response()->json([
+            'success' => 'se encontró el permiso',
+            'data' => $this->permisoService->buscar($id)
+        ]);
     }
 
     public function update(UpdatePermisoRequest $request, int $id)
     {
-        $this->permisoService->actualizar($id, $request->validated());
+        $registroActualizado = $this->permisoService->actualizar($id, $request->validated());
 
-        return redirect()->route('permisos.index')->with('success', 'Permiso actualizado correctamente.');
+        return response()->json([
+            'success' => 'permiso se actualizó correctamente',
+            'data' => $registroActualizado
+        ]);
     }
 
     public function destroy(int $id)
     {
         $this->permisoService->eliminar($id);
 
-        return redirect()->route('permisos.index')->with('success', 'Permiso eliminado correctamente.');
+        return response()->json([
+            'success' => 'permiso se eliminó correctamente'
+        ]);
     }
 }
