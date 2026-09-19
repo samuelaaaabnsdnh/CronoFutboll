@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-interface RolRepositoryInterface extends BaseInterface
+interface RolInterface extends BaseInterface
 {
     //
 }

@@ -5,7 +5,7 @@ namespace App\Interfaces;
 use App\Models\Convocatorias;
 use Illuminate\Database\Eloquent\Collection;
 
-interface ConvocatoriaRepositoryInterface
+interface ConvocatoriaInterface
 {
     public function all(): Collection;
 

@@ -2,32 +2,30 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\ConvocatoriaInterface;
-use App\Models\Convocatorias;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
-class ConvocatoriaRepository implements ConvocatoriaInterface
+abstract class BaseRepository
 {
-    public function __construct(private Convocatorias $model)
+    public function __construct(protected Model $model)
     {
     }
 
-    public function all(): Collection
+    public function all()
     {
         return $this->model->all();
     }
 
-    public function find(int $id): ?Convocatorias
+    public function find(int $id)
     {
         return $this->model->find($id);
     }
 
-    public function create(array $data): Convocatorias
+    public function create(array $data)
     {
         return $this->model->create($data);
     }
 
-    public function update(int $id, array $data): ?Convocatorias
+    public function update(int $id, array $data)
     {
         $registro = $this->model->find($id);
 
@@ -49,5 +47,12 @@ class ConvocatoriaRepository implements ConvocatoriaInterface
         }
 
         return (bool) $registro->delete();
+    }
+
+    protected function getByField(string $field, mixed $value, string $operator = '=')
+    {
+        $resultado = $this->model->where($field, $operator, $value)->get();
+
+        return $resultado->isEmpty() ? null : $resultado;
     }
 }

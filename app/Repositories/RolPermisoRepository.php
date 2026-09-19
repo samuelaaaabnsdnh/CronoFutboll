@@ -27,26 +27,26 @@ class RolPermisoRepository implements RolPermisoInterface
     public function delete(int $id_rol, int $id_permiso)
     {
         return $this->model
-            ->where('id_rol', $id_rol)
-            ->where('id_permiso', $id_permiso)
+            ->where('rol_id', $id_rol)
+            ->where('permiso_id', $id_permiso)
             ->delete();
     }
 
     public function exists(int $id_rol, int $id_permiso): bool
     {
         return $this->model
-            ->where('id_rol', $id_rol)
-            ->where('id_permiso', $id_permiso)
+            ->where('rol_id', $id_rol)
+            ->where('permiso_id', $id_permiso)
             ->exists();
     }
 
     public function getByRol(int $id_rol)
     {
-        return $this->model->with('permiso')->where('id_rol', $id_rol)->get();
+        return $this->model->with('permiso')->where('rol_id', $id_rol)->get();
     }
 
     public function getByPermiso(int $id_permiso)
     {
-        return $this->model->with('rol')->where('id_permiso', $id_permiso)->get();
+        return $this->model->with('rol')->where('permiso_id', $id_permiso)->get();
     }
 }

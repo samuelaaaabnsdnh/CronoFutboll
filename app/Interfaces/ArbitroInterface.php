@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Repositories\Interfaces;
+namespace App\Interfaces;
 
-interface ArbitroRepositoryInterface extends BaseRepositoryInterface
+interface ArbitroInterface extends BaseRepositoryInterface
 {
     public function getByDocumento(string $documento);
+
     public function getByEstado(string $estado);
+
     public function getByExperiencia(int $experiencia);
 }

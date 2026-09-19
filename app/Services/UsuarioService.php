@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
-use App\Interfaces\UsuarioRepositoryInterface;
+use App\Interfaces\UsuarioInterface;
 use Illuminate\Support\Facades\Hash;
 
 class UsuarioService
 {
-    protected UsuarioRepositoryInterface $usuarioRepository;
+    protected UsuarioInterface $usuarioRepository;
 
-    public function __construct(UsuarioRepositoryInterface $usuarioRepository)
+    public function __construct(UsuarioInterface $usuarioRepository)
     {
         $this->usuarioRepository = $usuarioRepository;
     }

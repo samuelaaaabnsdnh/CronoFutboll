@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\UsuarioRepositoryInterface;
+use App\Interfaces\UsuarioInterface;
 use App\Models\Usuario;
 
-class UsuarioRepository implements UsuarioRepositoryInterface
+class UsuarioRepository implements UsuarioInterface
 {
     public function create(array $data)
     {

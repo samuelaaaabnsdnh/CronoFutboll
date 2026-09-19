@@ -1,10 +1,10 @@
 <?php
 namespace App\Services;
-use App\Interfaces\EstadisticaJugadorRepositoryInterface;
+use App\Interfaces\EstadisticaJugadorInterface;
 class EstadisticaJugadorService
 {
     public function __construct(
-        private EstadisticaJugadorRepositoryInterface $estadisticaJugadorRepository
+        private EstadisticaJugadorInterface $estadisticaJugadorRepository
     ){}
     public function list()
     {

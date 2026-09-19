@@ -11,7 +11,7 @@ class Torneos extends Model
     use HasFactory;
 
     protected $table = 'torneos';
-    protected $primaryKey = 'id_torneo';
+
 
     protected $fillable = [
         'nombre',

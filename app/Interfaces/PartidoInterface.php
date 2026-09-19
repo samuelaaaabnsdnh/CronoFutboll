@@ -5,7 +5,7 @@ namespace App\Interfaces;
 use App\Models\Partidos;
 use Illuminate\Database\Eloquent\Collection;
 
-interface PartidoRepositoryInterface
+interface PartidoInterface
 {
     public function all(): Collection;
 

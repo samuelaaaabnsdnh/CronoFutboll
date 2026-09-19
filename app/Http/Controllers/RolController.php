@@ -8,50 +8,52 @@ use App\Services\RolService;
 
 class RolController extends Controller
 {
-    protected RolService $rolService;
-
-    public function __construct(RolService $rolService)
+    public function __construct(private RolService $rolService)
     {
-        $this->rolService = $rolService;
     }
 
     public function index()
     {
-        $roles = $this->rolService->listar();
-
-        return view('roles.index', compact('roles'));
-    }
-
-    public function create()
-    {
-        return view('roles.create');
+        return response()->json([
+            'success' => 'se listaron correctamente',
+            'data' => $this->rolService->listar()
+        ]);
     }
 
     public function store(StoreRolRequest $request)
     {
-        $this->rolService->crear($request->validated());
+        $registroInsertado = $this->rolService->crear($request->validated());
 
-        return redirect()->route('roles.index')->with('success', 'Rol creado correctamente.');
+        return response()->json([
+            'success' => 'rol se creó correctamente',
+            'data' => $registroInsertado
+        ]);
     }
 
-    public function edit(int $id)
+    public function show(int $id)
     {
-        $rol = $this->rolService->buscar($id);
-
-        return view('roles.edit', compact('rol'));
+        return response()->json([
+            'success' => 'se encontró el rol',
+            'data' => $this->rolService->buscar($id)
+        ]);
     }
 
     public function update(UpdateRolRequest $request, int $id)
     {
-        $this->rolService->actualizar($id, $request->validated());
+        $registroActualizado = $this->rolService->actualizar($id, $request->validated());
 
-        return redirect()->route('roles.index')->with('success', 'Rol actualizado correctamente.');
+        return response()->json([
+            'success' => 'rol se actualizó correctamente',
+            'data' => $registroActualizado
+        ]);
     }
 
     public function destroy(int $id)
     {
         $this->rolService->eliminar($id);
 
-        return redirect()->route('roles.index')->with('success', 'Rol eliminado correctamente.');
+        return response()->json([
+            'success' => 'rol se eliminó correctamente'
+        ]);
     }
 }

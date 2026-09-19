@@ -11,7 +11,8 @@ class Equipos extends Model
     use HasFactory;
 
     protected $table = 'equipos';
-    protected $primaryKey = 'id_equipo';
+
+    public $timestamps = false;
 
     protected $fillable = [
         'nombre',

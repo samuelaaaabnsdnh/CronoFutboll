@@ -7,7 +7,7 @@ use App\Interfaces\ArbitroInterface;
 class ArbitroService
 {
     public function __construct(
-        private ArbitrosInterface $arbitroRepository
+        private ArbitroInterface $arbitroRepository
     ){}
 
     public function list()

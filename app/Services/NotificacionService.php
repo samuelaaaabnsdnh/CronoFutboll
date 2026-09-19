@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
-use App\Interfaces\NotificacionRepositoryInterface;
+use App\Interfaces\NotificacionInterface;
 
 class NotificacionService
 {
-    protected NotificacionRepositoryInterface $notificacionRepository;
+    protected NotificacionInterface $notificacionRepository;
 
-    public function __construct(NotificacionRepositoryInterface $notificacionRepository)
+    public function __construct(NotificacionInterface $notificacionRepository)
     {
         $this->notificacionRepository = $notificacionRepository;
     }

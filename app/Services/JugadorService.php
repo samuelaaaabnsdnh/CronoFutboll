@@ -7,7 +7,7 @@ use App\Interfaces\JugadorInterface;
 class JugadorService
 {
     public function __construct(
-        private JugadoresInterface $jugadorRepository
+        private JugadorInterface $jugadorRepository
     ){}
 
     public function list()

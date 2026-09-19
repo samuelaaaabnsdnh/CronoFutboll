@@ -2,11 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\PartidoRepositoryInterface;
+use App\Interfaces\PartidoInterface;
 use App\Models\Partidos;
 use Illuminate\Database\Eloquent\Collection;
 
-class PartidoRepository implements PartidoRepositoryInterface
+class PartidoRepository implements PartidoInterface
 {
     public function all(): Collection
     {

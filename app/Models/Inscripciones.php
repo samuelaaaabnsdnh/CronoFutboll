@@ -10,6 +10,7 @@ class Inscripciones extends Model
     use HasFactory;
 
     protected $table="inscripciones";
+    public $timestamps = false;
     
     protected $fillable =[
         'fecha_inscripcion',

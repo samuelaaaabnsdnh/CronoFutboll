@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-interface UsuarioRepositoryInterface extends BaseInterface
+interface UsuarioInterface extends BaseInterface
 {
     //
 }
