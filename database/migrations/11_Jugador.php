@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer("numero_camiseta")->nullable();
             $table->string("telefono", 20)->nullable();
             $table->string("estado", 20);
+            $table->softDeletes();
 
             $table->foreign("equipo_id")->references("id")->on("equipos")->onDelete("cascade");
         });
