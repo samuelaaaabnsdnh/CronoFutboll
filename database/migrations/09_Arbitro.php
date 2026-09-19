@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string("correo", 150)->nullable();
             $table->integer("experiencia")->nullable();
             $table->string("estado", 20);
+            $table->softDeletes();
         });
     }
     public function down(): void

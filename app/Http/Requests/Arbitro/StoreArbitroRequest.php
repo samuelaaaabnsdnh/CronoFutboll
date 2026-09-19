@@ -28,7 +28,7 @@ class StoreArbitroRequest extends FormRequest
                 'required',
                 'string',
                 'max:30',
-                'unique:arbitros,documento',
+                'unique:arbitros,documento,' . $this->route('arbitro'),
             ],
             'telefono' => [
                 'nullable',

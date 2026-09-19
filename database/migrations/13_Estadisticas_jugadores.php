@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('tarjetas_rojas')->default(0);
             $table->integer('minutos_jugados')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

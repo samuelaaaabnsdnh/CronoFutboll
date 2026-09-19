@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('telefono', 20)->nullable();
             $table->string('estado', 20);
             $table->dateTime('fecha_registro');
+            $table->softDeletes();
 
             $table->foreign('rol_id')->references('id')->on('roles');
         });
