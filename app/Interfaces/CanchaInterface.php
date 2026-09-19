@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Repositories\Interfaces;
+namespace App\Interfaces;
 
-interface CanchaRepositoryInterface extends BaseRepositoryInterface
+interface CanchaInterface extends BaseRepositoryInterface
 {
     public function getByUbicacion(string $ubicacion);
+
     public function getByEstado(string $estado);
+
     public function getByCapacidad(int $capacidad);
 }

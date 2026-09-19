@@ -5,7 +5,7 @@ namespace App\Interfaces;
 use App\Models\ConvocatoriaJugadores;
 use Illuminate\Database\Eloquent\Collection;
 
-interface ConvocatoriaJugadorRepositoryInterface
+interface ConvocatoriaJugadorInterface
 {
     public function all(): Collection;
 

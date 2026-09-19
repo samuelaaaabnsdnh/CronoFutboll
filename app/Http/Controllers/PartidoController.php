@@ -8,50 +8,52 @@ use App\Services\PartidoService;
 
 class PartidoController extends Controller
 {
-    protected PartidoService $partidoService;
-
-    public function __construct(PartidoService $partidoService)
+    public function __construct(private PartidoService $partidoService)
     {
-        $this->partidoService = $partidoService;
     }
 
     public function index()
     {
-        $partidos = $this->partidoService->list();
-
-        return view('partidos.index', compact('partidos'));
-    }
-
-    public function create()
-    {
-        return view('partidos.create');
+        return response()->json([
+            'success' => 'se listaron correctamente',
+            'data' => $this->partidoService->list()
+        ]);
     }
 
     public function store(StorePartidoRequest $request)
     {
-        $this->partidoService->store($request->validated());
+        $registroInsertado = $this->partidoService->store($request->validated());
 
-        return redirect()->route('partidos.index')->with('success', 'Partido creado correctamente.');
+        return response()->json([
+            'success' => 'partido se creó correctamente',
+            'data' => $registroInsertado
+        ]);
     }
 
-    public function edit(int $id)
+    public function show(int $id)
     {
-        $partido = $this->partidoService->show($id);
-
-        return view('partidos.edit', compact('partido'));
+        return response()->json([
+            'success' => 'se encontró el partido',
+            'data' => $this->partidoService->show($id)
+        ]);
     }
 
     public function update(UpdatePartidoRequest $request, int $id)
     {
-        $this->partidoService->update($id, $request->validated());
+        $registroActualizado = $this->partidoService->update($id, $request->validated());
 
-        return redirect()->route('partidos.index')->with('success', 'Partido actualizado correctamente.');
+        return response()->json([
+            'success' => 'partido se actualizó correctamente',
+            'data' => $registroActualizado
+        ]);
     }
 
     public function destroy(int $id)
     {
         $this->partidoService->destroy($id);
 
-        return redirect()->route('partidos.index')->with('success', 'Partido eliminado correctamente.');
+        return response()->json([
+            'success' => 'partido se eliminó correctamente'
+        ]);
     }
 }

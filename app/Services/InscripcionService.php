@@ -7,7 +7,7 @@ use App\Interfaces\InscripcionInterface;
 class InscripcionService
 {
     public function __construct(
-        private InscripcionesInterface $inscripcionRepository
+        private InscripcionInterface $inscripcionRepository
     ){}
 
     public function list()
@@ -40,7 +40,7 @@ class InscripcionService
         return $this->inscripcionRepository->getByTorneo($idTorneo);
     }
 
-    public function getByEquipo(int $idTorneo)
+    public function getByEquipo(int $idEquipo)
     {
         return $this->inscripcionRepository->getByEquipo($idEquipo);
     }

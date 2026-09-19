@@ -1,10 +1,10 @@
 <?php
 namespace App\Services;
-use App\Interfaces\ConvocatoriaRepositoryInterface;
+use App\Interfaces\ConvocatoriaInterface;
 class ConvocatoriaService
 {
     public function __construct(
-        private ConvocatoriaRepositoryInterface $convocatoriaRepository
+        private ConvocatoriaInterface $convocatoriaRepository
     ){}
     public function list()
     {

@@ -8,50 +8,52 @@ use App\Services\NotificacionService;
 
 class NotificacionController extends Controller
 {
-    protected NotificacionService $notificacionService;
-
-    public function __construct(NotificacionService $notificacionService)
+    public function __construct(private NotificacionService $notificacionService)
     {
-        $this->notificacionService = $notificacionService;
     }
 
     public function index()
     {
-        $notificaciones = $this->notificacionService->listar();
-
-        return view('notificaciones.index', compact('notificaciones'));
-    }
-
-    public function create()
-    {
-        return view('notificaciones.create');
+        return response()->json([
+            'success' => 'se listaron correctamente',
+            'data' => $this->notificacionService->listar()
+        ]);
     }
 
     public function store(StoreNotificacionRequest $request)
     {
-        $this->notificacionService->crear($request->validated());
+        $registroInsertado = $this->notificacionService->crear($request->validated());
 
-        return redirect()->route('notificaciones.index')->with('success', 'Notificación creada correctamente.');
+        return response()->json([
+            'success' => 'notificación se creó correctamente',
+            'data' => $registroInsertado
+        ]);
     }
 
-    public function edit(int $id)
+    public function show(int $id)
     {
-        $notificacion = $this->notificacionService->buscar($id);
-
-        return view('notificaciones.edit', compact('notificacion'));
+        return response()->json([
+            'success' => 'se encontró la notificación',
+            'data' => $this->notificacionService->buscar($id)
+        ]);
     }
 
     public function update(UpdateNotificacionRequest $request, int $id)
     {
-        $this->notificacionService->actualizar($id, $request->validated());
+        $registroActualizado = $this->notificacionService->actualizar($id, $request->validated());
 
-        return redirect()->route('notificaciones.index')->with('success', 'Notificación actualizada correctamente.');
+        return response()->json([
+            'success' => 'notificación se actualizó correctamente',
+            'data' => $registroActualizado
+        ]);
     }
 
     public function destroy(int $id)
     {
         $this->notificacionService->eliminar($id);
 
-        return redirect()->route('notificaciones.index')->with('success', 'Notificación eliminada correctamente.');
+        return response()->json([
+            'success' => 'notificación se eliminó correctamente'
+        ]);
     }
 }

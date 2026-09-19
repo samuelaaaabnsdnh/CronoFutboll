@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-interface PermisoRepositoryInterface extends BaseInterface
+interface PermisoInterface extends BaseInterface
 {
     //
 }

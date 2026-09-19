@@ -1,7 +1,7 @@
 <?php
 // app/Http/Requests/StoreEquiposRequest.php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Equipos;
 
 use Illuminate\Foundation\Http\FormRequest;
 

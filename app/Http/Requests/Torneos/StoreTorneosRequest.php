@@ -1,7 +1,7 @@
 <?php
 // app/Http/Requests/StoreTorneosRequest.php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Torneos;
 
 use Illuminate\Foundation\Http\FormRequest;
 

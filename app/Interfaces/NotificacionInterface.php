@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-interface NotificacionRepositoryInterface extends BaseInterface
+interface NotificacionInterface extends BaseInterface
 {
     //
 }

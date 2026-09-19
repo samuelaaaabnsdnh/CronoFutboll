@@ -1,90 +1,73 @@
 <?php
-// app/Http/Controllers/RolPermisoController.php
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreRolPermisoRequest;
-use App\Http\Requests\UpdateRolPermisoRequest;
-use App\Models\Permiso;
-use App\Models\Rol;
-use App\Models\RolPermiso;
+use App\Http\Requests\RolPermiso\StoreRolPermisoRequest;
+use App\Http\Requests\RolPermiso\UpdateRolPermisoRequest;
+use App\Services\RolPermisoService;
 
 class RolPermisoController extends Controller
 {
-    public function index()
+    public function __construct(private RolPermisoService $rolPermisoService)
     {
-        $asignaciones = RolPermiso::with(['rol', 'permiso'])->get();
-
-        return view('roles-permisos.index', compact('asignaciones'));
     }
 
-    public function create()
+    public function index()
     {
-        $roles = Rol::orderBy('nombre')->get();
-        $permisos = Permiso::orderBy('nombre')->get();
-
-        return view('roles-permisos.create', compact('roles', 'permisos'));
+        return response()->json([
+            'success' => 'se listaron correctamente',
+            'data' => $this->rolPermisoService->list()
+        ]);
     }
 
     public function store(StoreRolPermisoRequest $request)
     {
         $data = $request->validated();
 
-        $yaExiste = RolPermiso::where('rol_id', $data['rol_id'])
-            ->where('permiso_id', $data['permiso_id'])
-            ->exists();
-
-        if ($yaExiste) {
-            return back()->withErrors(['permiso_id' => 'Ese permiso ya está asignado a este rol.']);
+        if ($this->rolPermisoService->exists($data['rol_id'], $data['permiso_id'])) {
+            return response()->json([
+                'error' => 'ese permiso ya está asignado a este rol'
+            ], 422);
         }
 
-        RolPermiso::create($data);
+        $registroInsertado = $this->rolPermisoService->store($data);
 
-        return redirect()->route('roles-permisos.index')->with('success', 'Permiso asignado correctamente.');
+        return response()->json([
+            'success' => 'permiso asignado correctamente',
+            'data' => $registroInsertado
+        ]);
     }
 
-    public function edit(int $rolId, int $permisoId)
+    // La PK es compuesta (id_rol + id_permiso), así que "actualizar"
+    // significa borrar la combinación anterior y crear la nueva.
+    public function update(UpdateRolPermisoRequest $request, int $id_rol, int $id_permiso)
     {
-        $asignacion = RolPermiso::where('rol_id', $rolId)
-            ->where('permiso_id', $permisoId)
-            ->firstOrFail();
-
-        $roles = Rol::orderBy('nombre')->get();
-        $permisos = Permiso::orderBy('nombre')->get();
-
-        return view('roles-permisos.edit', compact('asignacion', 'roles', 'permisos'));
-    }
-
-    public function update(UpdateRolPermisoRequest $request, int $rolId, int $permisoId)
-    {
-        RolPermiso::where('rol_id', $rolId)->where('permiso_id', $permisoId)->firstOrFail();
-
         $data = $request->validated();
 
-        $yaExiste = RolPermiso::where('rol_id', $data['rol_id'])
-            ->where('permiso_id', $data['permiso_id'])
-            ->where(function ($query) use ($rolId, $permisoId) {
-                $query->where('rol_id', '!=', $rolId)
-                    ->orWhere('permiso_id', '!=', $permisoId);
-            })
-            ->exists();
+        $yaExiste = $this->rolPermisoService->exists($data['rol_id'], $data['permiso_id'])
+            && ! ($data['rol_id'] == $id_rol && $data['permiso_id'] == $id_permiso);
 
         if ($yaExiste) {
-            return back()->withErrors(['permiso_id' => 'Ese permiso ya está asignado a este rol.']);
+            return response()->json([
+                'error' => 'ese permiso ya está asignado a este rol'
+            ], 422);
         }
 
-        // La PK es compuesta (rol_id + permiso_id), así que "actualizar"
-        // significa borrar la combinación anterior y crear la nueva.
-        RolPermiso::where('rol_id', $rolId)->where('permiso_id', $permisoId)->delete();
-        RolPermiso::create($data);
+        $this->rolPermisoService->destroy($id_rol, $id_permiso);
+        $registroInsertado = $this->rolPermisoService->store($data);
 
-        return redirect()->route('roles-permisos.index')->with('success', 'Asignación actualizada correctamente.');
+        return response()->json([
+            'success' => 'asignación actualizada correctamente',
+            'data' => $registroInsertado
+        ]);
     }
 
-    public function destroy(int $rolId, int $permisoId)
+    public function destroy(int $id_rol, int $id_permiso)
     {
-        RolPermiso::where('rol_id', $rolId)->where('permiso_id', $permisoId)->delete();
+        $this->rolPermisoService->destroy($id_rol, $id_permiso);
 
-        return redirect()->route('roles-permisos.index')->with('success', 'Permiso removido correctamente.');
+        return response()->json([
+            'success' => 'permiso removido correctamente'
+        ]);
     }
 }

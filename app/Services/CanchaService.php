@@ -7,7 +7,7 @@ use App\Interfaces\CanchaInterface;
 class CanchaService
 {
     public function __construct(
-        private CanchasInterface $canchaRepository
+        private CanchaInterface $canchaRepository
     ){}
 
     public function list()

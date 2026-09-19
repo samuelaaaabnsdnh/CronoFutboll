@@ -2,11 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\EstadisticaJugadorRepositoryInterface;
+use App\Interfaces\EstadisticaJugadorInterface;
 use App\Models\EstadisticasJugadores;
 use Illuminate\Database\Eloquent\Collection;
 
-class EstadisticaJugadorRepository implements EstadisticaJugadorRepositoryInterface
+class EstadisticaJugadorRepository implements EstadisticaJugadorInterface
 {
     public function all(): Collection
     {

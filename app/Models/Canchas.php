@@ -11,6 +11,8 @@ class Canchas extends Model
 
     protected $table="canchas";
 
+    public $timestamps = false;
+
     protected $fillable =[
         'nombre',
         'ubicacion',

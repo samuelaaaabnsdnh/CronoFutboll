@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\EstadísticaJugador;
+namespace App\Http\Requests\EstadisticaJugador;
 
 use Illuminate\Foundation\Http\FormRequest;
 

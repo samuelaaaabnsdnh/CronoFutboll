@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
-use App\Interfaces\PermisoRepositoryInterface;
+use App\Interfaces\PermisoInterface;
 
 class PermisoService
 {
-    protected PermisoRepositoryInterface $permisoRepository;
+    protected PermisoInterface $permisoRepository;
 
-    public function __construct(PermisoRepositoryInterface $permisoRepository)
+    public function __construct(PermisoInterface $permisoRepository)
     {
         $this->permisoRepository = $permisoRepository;
     }

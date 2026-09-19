@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\PermisoRepositoryInterface;
+use App\Interfaces\PermisoInterface;
 use App\Models\Permiso;
 
-class PermisoRepository implements PermisoRepositoryInterface
+class PermisoRepository implements PermisoInterface
 {
     public function create(array $data)
     {

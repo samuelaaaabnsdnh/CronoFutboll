@@ -5,7 +5,7 @@ namespace App\Interfaces;
 use App\Models\EstadisticasJugadores;
 use Illuminate\Database\Eloquent\Collection;
 
-interface EstadisticaJugadorRepositoryInterface
+interface EstadisticaJugadorInterface
 {
     public function all(): Collection;
 

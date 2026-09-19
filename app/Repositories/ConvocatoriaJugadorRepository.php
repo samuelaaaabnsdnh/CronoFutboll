@@ -2,11 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\ConvocatoriaJugadorRepositoryInterface;
+use App\Interfaces\ConvocatoriaJugadorInterface;
 use App\Models\ConvocatoriaJugadores;
 use Illuminate\Database\Eloquent\Collection;
 
-class ConvocatoriaJugadorRepository implements ConvocatoriaJugadorRepositoryInterface
+class ConvocatoriaJugadorRepository implements ConvocatoriaJugadorInterface
 {
     public function all(): Collection
     {
