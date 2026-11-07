@@ -43,4 +43,5 @@ Route::apiResource('convocatoria-jugadores', ConvocatoriaJugadorController::clas
 Route::get('roles-permisos', [RolPermisoController::class, 'index']);
 Route::post('roles-permisos', [RolPermisoController::class, 'store']);
 Route::put('roles-permisos/{id_rol}/{id_permiso}', [RolPermisoController::class, 'update']);
+Route::patch('roles-permisos/{id_rol}/{id_permiso}', [RolPermisoController::class, 'update']);
 Route::delete('roles-permisos/{id_rol}/{id_permiso}', [RolPermisoController::class, 'destroy']);

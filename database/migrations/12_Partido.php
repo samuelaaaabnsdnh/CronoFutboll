@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('goles_visitante')->nullable();
             $table->enum('estado', ['programado', 'en_curso', 'finalizado', 'cancelado'])->default('programado');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

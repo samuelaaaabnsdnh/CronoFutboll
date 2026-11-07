@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreign("equipo_id")->references("id")->on("equipos")->onDelete("cascade");
 
             $table->unique(["torneo_id", "equipo_id"]);
+            $table->softDeletes();
         });
     }
 

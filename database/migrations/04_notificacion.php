@@ -15,6 +15,7 @@ return new class extends Migration
             $table->text('mensaje');
             $table->dateTime('fecha_envio');
             $table->boolean('leida');
+            $table->softDeletes();
 
             $table->foreign('usuario_id')->references('id')->on('usuarios');
         });

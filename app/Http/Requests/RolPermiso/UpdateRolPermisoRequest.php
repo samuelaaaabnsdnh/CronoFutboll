@@ -1,7 +1,7 @@
 <?php
 // app/Http/Requests/UpdateRolPermisoRequest.php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\RolPermiso;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -12,11 +12,11 @@ class UpdateRolPermisoRequest extends FormRequest
         return true;
     }
 
-    public function rules(): array
+   public function rules(): array
     {
         return [
-            'id_rol'     => 'required|exists:roles,id_rol',
-            'id_permiso' => 'required|exists:permisos,id_permiso',
+            'rol_id'     => 'required|integer|exists:roles,id',
+            'permiso_id' => 'required|integer|exists:permisos,id',
         ];
     }
 }

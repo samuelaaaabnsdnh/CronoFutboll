@@ -9,7 +9,7 @@ class UpdateArbitroRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     public function rules(): array
@@ -32,7 +32,7 @@ class UpdateArbitroRequest extends FormRequest
                 'required',
                 'string',
                 'max:30',
-                Rule::unique('arbitros', 'documento')->ignore($this->route('id')),
+                Rule::unique('arbitros', 'documento')->ignore($this->route('arbitro')),
             ],
             'telefono' => [
                 'sometimes',

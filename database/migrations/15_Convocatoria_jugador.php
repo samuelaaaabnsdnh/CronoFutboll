@@ -14,6 +14,7 @@ return new class extends Migration
             $table->foreignId('jugador_id')->constrained('jugadores')->cascadeOnDelete();
             $table->boolean('titular')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
