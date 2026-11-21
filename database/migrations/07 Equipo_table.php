@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('correo', 150)->nullable();
             $table->string('estado', 20);
             $table->dateTime('fecha_registro');
+            $table->softDeletes();
         });
     }
 

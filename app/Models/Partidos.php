@@ -6,14 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Partidos extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
 
     protected $table = 'partidos';
 
     protected $fillable = [
+        'torneo_id',
         'equipo_local_id',
         'equipo_visitante_id',
         'fecha',
@@ -29,6 +31,11 @@ class Partidos extends Model
         return [
             'fecha' => 'date',
         ];
+    }
+
+    public function torneo(): BelongsTo
+    {
+        return $this->belongsTo(Torneos::class, 'torneo_id');
     }
 
     public function equipoLocal(): BelongsTo

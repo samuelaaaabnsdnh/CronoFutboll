@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign('permiso_id')->references('id')->on('permisos')->cascadeOnDelete();
 
             $table->primary(['rol_id', 'permiso_id']);
+            $table->softDeletes();
         });
     }
 

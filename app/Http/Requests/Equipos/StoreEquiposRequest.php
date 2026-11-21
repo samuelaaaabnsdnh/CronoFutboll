@@ -15,6 +15,7 @@ class StoreEquiposRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'usuario_id' => 'nullable|integer|exists:usuarios,id',
             'nombre'     => 'required|string|max:100|unique:equipos,nombre',
             'entrenador' => 'nullable|string|max:150',
             'telefono'   => 'nullable|string|max:20',

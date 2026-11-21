@@ -1,7 +1,7 @@
 <?php
 // app/Http/Requests/UpdateTorneosRequest.php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Torneos;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -19,7 +19,7 @@ class UpdateTorneosRequest extends FormRequest
             'categoria'    => 'nullable|string|max:50',
             'descripcion'  => 'nullable|string',
             'fecha_inicio' => 'required|date',
-            'fecha_fin'    => 'required|date|after_or_equal:fecha_inicio',
+            'fecha_fin'    => 'nullable|date|after_or_equal:fecha_inicio',
             'estado'       => 'required|string|in:programado,en_curso,finalizado,cancelado',
         ];
     }

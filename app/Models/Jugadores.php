@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Jugadores extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
 
     protected $table="jugadores";
     public $timestamps = false;
@@ -22,10 +23,7 @@ class Jugadores extends Model
         'numero_camiseta',
         'telefono',
         'estado',
-    ];
-
-    protected $casts = [
-        'estado'=> 'boolean'
+        'usuario_id',
     ];
 
     public function Equipos()

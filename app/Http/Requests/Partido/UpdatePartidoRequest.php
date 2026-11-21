@@ -14,6 +14,7 @@ class UpdatePartidoRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'torneo_id' => ['nullable', 'integer', 'exists:torneos,id'],
             'equipo_local_id' => ['sometimes', 'required', 'integer', 'exists:equipos,id'],
             'equipo_visitante_id' => ['sometimes', 'required', 'integer', 'exists:equipos,id', 'different:equipo_local_id'],
             'fecha' => ['sometimes', 'required', 'date'],

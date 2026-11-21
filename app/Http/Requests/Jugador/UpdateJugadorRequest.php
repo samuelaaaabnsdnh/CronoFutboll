@@ -9,12 +9,13 @@ class UpdateJugadorRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     public function rules(): array
     {
         return [
+            'usuario_id' => ['sometimes', 'nullable', 'integer', 'exists:usuarios,id'],
             'equipo_id' => [
                 'sometimes',
                 'required',
@@ -38,7 +39,7 @@ class UpdateJugadorRequest extends FormRequest
                 'required',
                 'string',
                 'max:30',
-                Rule::unique('jugadores', 'documento')->ignore($this->route('id')),
+                Rule::unique('jugadores', 'documento')->ignore(array_values($this->route()->parameters())[0] ?? null),
             ],
             'fecha_nacimiento' => [
                 'sometimes',

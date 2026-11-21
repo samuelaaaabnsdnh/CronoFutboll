@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RolPermiso extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'roles_permisos';
 
-    // Eloquent no soporta claves primarias compuestas de forma nativa,
-    // así que desactivamos el autoincremento y el manejo de PK simple.
     public $incrementing = false;
     protected $primaryKey = null;
     public $timestamps = false;

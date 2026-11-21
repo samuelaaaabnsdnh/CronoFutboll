@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Equipos extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
 
     protected $table = 'equipos';
 
@@ -21,6 +22,7 @@ class Equipos extends Model
         'correo',
         'estado',
         'fecha_registro',
+        'usuario_id',
     ];
 
     protected function casts(): array
@@ -33,24 +35,24 @@ class Equipos extends Model
     // Un equipo contiene muchos jugadores
     public function jugadores(): HasMany
     {
-        return $this->hasMany(Jugadores::class, 'id_equipo', 'id_equipo');
+        return $this->hasMany(Jugadores::class, 'equipo_id');
     }
 
     // Un equipo tiene muchas inscripciones a torneos
     public function inscripciones(): HasMany
     {
-        return $this->hasMany(Inscripciones::class, 'id_equipo', 'id_equipo');
+        return $this->hasMany(Inscripciones::class, 'equipo_id');
     }
 
     // Partidos donde el equipo juega de local
     public function partidosLocal(): HasMany
     {
-        return $this->hasMany(Partidos::class, 'equipo_local', 'id_equipo');
+        return $this->hasMany(Partidos::class, 'equipo_local_id');
     }
 
     // Partidos donde el equipo juega de visitante
     public function partidosVisitante(): HasMany
     {
-        return $this->hasMany(Partidos::class, 'equipo_visitante', 'id_equipo');
+        return $this->hasMany(Partidos::class, 'equipo_visitante_id');
     }
 }
