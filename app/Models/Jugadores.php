@@ -23,10 +23,7 @@ class Jugadores extends Model
         'numero_camiseta',
         'telefono',
         'estado',
-    ];
-
-    protected $casts = [
-        'estado'=> 'boolean'
+        'usuario_id',
     ];
 
     public function Equipos()

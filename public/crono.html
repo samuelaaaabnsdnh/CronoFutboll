@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CronoFutbol · Gestor de torneos</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>*,::before,::after{box-sizing:border-box}a{color:inherit;text-decoration:none}h2,h3,p{margin:0}button,input,select{font:inherit}
+
+:root{--bg:#050D1F;--g1:#138A3B;--g2:#0E6B2D;--line:#ffffff2e}
+body{margin:0;min-height:100vh;color:#E6ECF5;font-family:'Barlow Semi Condensed',Arial,sans-serif;font-weight:500;letter-spacing:.2px;
+  background:radial-gradient(ellipse at 20% -10%,#0F2E5C55,transparent 55%),var(--bg)}
+button{cursor:pointer;font:inherit}
+.banner{position:sticky;top:0;z-index:30;height:64px;display:flex;align-items:center;gap:14px;padding:0 18px;
+  background:linear-gradient(180deg,#16A046,#0E6B2D);border-bottom:1px solid #ffffff66;box-shadow:0 4px 16px #0009}
+#burger{background:#ffffff1f;color:#fff;border:1px solid #ffffff55;border-radius:8px;width:38px;height:38px;font-size:18px}
+#burger:hover{background:#ffffff33}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff}
+.logo-t{font-size:1.55rem;font-weight:800;letter-spacing:.3px}
+.logo-t b{color:#BFF3D1;font-weight:600}
+#user{position:relative;display:flex;gap:8px;margin-left:auto}
+.ubtn,.btn{background:#fff;color:#0E6B2D;border:0;border-radius:8px;padding:8px 16px;font-weight:700;display:flex;align-items:center;gap:8px}
+.btn{background:var(--g1);color:#fff;border:1px solid #ffffff66}.btn.alt{background:transparent}
+.btn:hover{filter:brightness(1.12)}
+.av{width:24px;height:24px;border-radius:50%;background:#0E6B2D;color:#fff;display:grid;place-items:center;font-size:.8rem}
+.um{position:absolute;right:0;top:52px;width:240px;background:#091A38;border:1px solid #ffffffaa;border-radius:10px;padding:10px;display:grid;gap:6px;box-shadow:0 14px 30px #000b}
+.um button,.um select{background:#102850;color:#fff;border:0;border-radius:6px;padding:8px;text-align:left;width:100%}
+.um button:hover{background:#17376b}.um label{font-size:.8rem;display:grid;gap:4px;opacity:.9}.hide{display:none!important}
+.shell{display:flex;min-height:calc(100vh - 64px)}
+#side{width:250px;flex:none;background:#030913;border-right:1px solid var(--line);display:flex;flex-direction:column;padding:14px 10px;transition:width .2s;overflow:hidden;position:sticky;top:64px;height:calc(100vh - 64px)}
+#sn{display:flex;flex-direction:column;gap:2px}#sn>*{flex:none}
+#sn button{display:flex;gap:12px;align-items:center;background:transparent;color:#C9D4E6;border:0;border-left:3px solid transparent;border-radius:6px;padding:10px;text-align:left;white-space:nowrap}
+#sn button:hover{background:#0B1B3A;color:#fff}#sn button.on{background:#0B1B3A;color:#fff;border-left-color:#22c55e}
+.ic{flex:none}
+#ct{margin-top:auto;display:grid;gap:6px;padding-top:14px;border-top:1px solid var(--line)}
+#ct a{display:flex;align-items:center;gap:10px;color:#C9D4E6;text-decoration:none;font-size:.9rem;white-space:nowrap;padding:4px 6px;border-radius:6px}
+#ct a:hover{background:#0B1B3A;color:#fff}.ci{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;flex:none;border:1px solid #ffffff55}
+body.mini #side{width:62px}body.mini #sn button span,body.mini #ct a span{display:none}
+main{flex:1;min-width:0;padding:22px 26px}
+#tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:12px}
+.tab{background:transparent;color:#C9D4E6;border:1px solid var(--line);border-radius:6px;padding:7px 14px;font-weight:600}
+.tab:hover{border-color:#fff;color:#fff}.tab.on{background:var(--g1);border-color:#fff;color:#fff}
+#title{font-size:clamp(1.3rem,2.6vw,1.9rem);font-weight:700;margin:0 0 16px;letter-spacing:.4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px}
+.card{container-type:inline-size;background:linear-gradient(165deg,#0C1F42,#06122A);border:2px solid #ffffffd9;border-radius:10px;padding:16px;
+  box-shadow:0 4px 0 #ffffff26,0 14px 28px #000a,inset 0 1px 0 #ffffff1f;transition:transform .15s,box-shadow .15s}
+.card:hover{transform:translateY(-3px);box-shadow:0 7px 0 #ffffff30,0 18px 30px #000b,inset 0 1px 0 #ffffff1f}
+.card h3{margin:0 0 10px;font-size:clamp(1rem,5.5cqw,1.35rem);font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.card p{margin:5px 0;font-size:clamp(.88rem,4cqw,1rem);color:#CBD5E6}.mut{opacity:.65}
+.bd{display:inline-block;background:#1E3560;color:#fff;border-radius:4px;padding:2px 8px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px}
+.bd.en_curso{background:#B91C1C}.bd.programado{background:#1D4ED8}.bd.finalizado{background:var(--g2)}.bd.cancelado{background:#475569}
+.vs{display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:center}
+.vs b{flex:1;font-size:clamp(.9rem,4.8cqw,1.15rem);font-weight:600}
+.sc{background:#030913;color:#fff;border:1px solid #ffffff55;font-weight:700;border-radius:6px;padding:2px 10px;font-size:clamp(1rem,6cqw,1.4rem);font-variant-numeric:tabular-nums}
+.inp{display:block;width:100%;background:#091A38;color:#fff;border:1px solid #ffffff88;border-radius:8px;padding:10px;margin:0 0 12px}
+.inp:focus{outline:2px solid #22c55e;border-color:transparent}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse}th{font-size:.75rem;text-transform:uppercase;letter-spacing:1px;opacity:.7}
+th,td{padding:9px 8px;text-align:left;border-bottom:1px solid #ffffff1f}
+.bar{height:6px;background:#ffffff1f;border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:#22c55e}
+.empty{text-align:center;opacity:.7;padding:34px}.spin{display:inline-block;width:14px;height:14px;border:2px solid #ffffff55;border-top-color:#fff;border-radius:50%;animation:r .8s linear infinite;vertical-align:-2px}
+@keyframes r{to{transform:rotate(360deg)}}
+dialog{background:#091A38;color:#fff;border:2px solid #ffffffd9;border-radius:12px;padding:24px;width:min(92vw,380px)}
+dialog::backdrop{background:#000b}#fa{display:grid;gap:4px}#fa a{color:#BFF3D1;text-align:center;margin-top:8px;font-size:.9rem}.er{color:#fca5a5;margin:0;font-size:.9rem}
+#fa .btn,.auth .btn{width:100%;justify-content:center;margin-top:6px}.fl{display:grid;gap:4px;font-size:.8rem;opacity:.95;text-transform:uppercase;letter-spacing:.6px}.fl .inp{margin:0;text-transform:none;letter-spacing:0;font-size:1rem}.ft{font-size:1.3rem;font-weight:700;margin-bottom:6px}
+dialog{max-height:90vh;overflow:auto}
+.sec{font-size:1.25rem;font-weight:700;margin:26px 0 12px}.acts{display:flex;gap:8px;margin-top:12px!important}
+.sm{background:transparent;color:#fff;border:1px solid #ffffff88;border-radius:6px;padding:4px 12px;font-size:.85rem}.sm:hover{background:#ffffff1f}.sm.dg{border-color:#f87171;color:#fca5a5}.sm.dg:hover{background:#7f1d1d55}
+.auth{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center;max-width:920px;margin:20px auto}.ap h2{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;line-height:1.1;margin-bottom:12px}.ap p{opacity:.8;margin-bottom:14px}.ap li{margin:8px 0 8px 18px;list-style:square;color:#BFF3D1}
+.auth form{display:grid;gap:4px}.auth .card h3{margin-bottom:14px}
+@media(max-width:800px){.auth{grid-template-columns:1fr}}
+.kv{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:12px 0 14px}.kv dt{opacity:.6;font-size:.8rem;text-transform:uppercase;letter-spacing:.6px;padding-top:3px}.kv dd{margin:0}
+#dd{background:#091A38;color:#fff;border:2px solid #ffffffd9;border-radius:12px;padding:24px;width:min(94vw,640px);max-height:90vh;overflow:auto}#dd::backdrop{background:#000b}
+#dd h3{font-size:1.5rem;font-weight:800;display:flex;gap:10px;align-items:center;flex-wrap:wrap}#dd h4{margin:18px 0 8px;font-size:1.05rem;border-bottom:1px solid var(--line);padding-bottom:4px}.grid1{display:grid;gap:14px}
+.card[data-v]{cursor:pointer}.more{opacity:.55;font-size:.8rem!important;margin-top:10px!important}.ck{cursor:pointer}.ck:hover{background:#ffffff0d}
+
+.qa{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 4px}.qa .btn{width:auto}
+.rb{background:#00000040;border-radius:4px;padding:1px 7px;font-size:.7rem;text-transform:uppercase;letter-spacing:.7px;margin-left:2px}
+.rolchip{margin:0 4px 10px;padding:7px 10px;border-left:3px solid #22c55e;background:#0B1B3A;border-radius:0 6px 6px 0;font-size:.75rem;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;overflow:hidden}
+.rolchip[data-r=admin]{border-color:#60a5fa}.rolchip[data-r=dt]{border-color:#22c55e}.rolchip[data-r=jug]{border-color:#c084fc}.rolchip[data-r=arb]{border-color:#fbbf24}.rolchip[data-r=afi]{border-color:#94a3b8}
+body.mini .rolchip{display:none}
+.rp{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}.rc{position:relative;border:1px solid #ffffff55;border-radius:8px;padding:8px 10px;cursor:pointer;display:grid;gap:2px}
+.rc input{position:absolute;opacity:0}.rc:has(input:checked){border-color:#22c55e;background:#0E6B2D55}.rc span{font-size:.72rem;opacity:.7}
+.sel{background:#102850;color:#fff;border:1px solid #ffffff55;border-radius:6px;padding:5px 8px}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#091A38;border:1px solid #ffffffaa;color:#fff;border-radius:8px;padding:10px 18px;z-index:99}
+@media(max-width:800px){#side{position:fixed;z-index:40;left:0;top:64px;transform:translateX(-100%);width:250px!important}body.open #side{transform:none}.logo-t{display:none}main{padding:16px}}
+
+.pill{display:inline-block;background:#22c55e22;color:#BFF3D1;border:1px solid #22c55e66;border-radius:99px;padding:4px 12px;font-size:.78rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:14px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:#030913;border:1px solid #ffffff44;border-radius:10px;padding:4px;margin-bottom:18px;gap:4px}
+.seg a{text-align:center;padding:9px;border-radius:7px;font-weight:700;color:#C9D4E6}.seg a.on{background:var(--g1);color:#fff;box-shadow:0 2px 8px #0008}.seg a:not(.on):hover{background:#0B1B3A}
+.pw{position:relative}.pw .inp{padding-right:44px}.eye{position:absolute;right:6px;top:4px;background:transparent;border:0;color:#fff;font-size:1.05rem;width:34px;height:34px;opacity:.7}.eye:hover{opacity:1}
+.btn:disabled{opacity:.65;cursor:wait}
+.auth{animation:fi .35s ease}.auth .card{padding:26px;box-shadow:0 20px 50px #000c,inset 0 1px 0 #ffffff1f}.auth .card:hover{transform:none}
+.ap h2{background:linear-gradient(90deg,#fff,#BFF3D1);-webkit-background-clip:text;background-clip:text;color:transparent}
+@keyframes fi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+#view{animation:fi .3s ease}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:34px 36px;margin-bottom:26px;border-radius:16px;border:1px solid #ffffff55;overflow:hidden;position:relative;
+  background:radial-gradient(circle at 85% 20%,#22c55e44,transparent 55%),linear-gradient(135deg,#0E6B2D,#06122A 70%);box-shadow:0 18px 40px #000a}
+.hero h2{font-size:clamp(1.8rem,4.5vw,3rem);font-weight:800;line-height:1.05;margin-bottom:12px}.hero p{opacity:.85;max-width:520px;font-size:1.1rem}
+.hball{font-size:clamp(4rem,12vw,8rem);filter:drop-shadow(0 10px 20px #000a);animation:fl 4s ease-in-out infinite}@keyframes fl{50%{transform:translateY(-10px) rotate(8deg)}}
+.wel{display:flex;align-items:center;gap:16px;padding:20px 24px;margin-bottom:22px;border-radius:14px;border:1px solid #ffffff55;background:linear-gradient(135deg,#0E6B2D,#0C1F42);box-shadow:0 12px 30px #0009}
+.wel .av{width:52px;height:52px;font-size:1.4rem;background:#fff;color:#0E6B2D;font-weight:800}.wel h3{font-size:1.5rem;font-weight:800}.wel p{opacity:.85;margin-top:2px}
+.mc{display:flex;align-items:center;gap:14px;cursor:pointer}.mc h3{margin:0 0 2px}.mc p{margin:0}.mc>div{flex:1}
+.mi{width:50px;height:50px;border-radius:12px;display:grid;place-items:center;font-size:1.5rem;background:#22c55e22;border:1px solid #22c55e66;flex:none}
+.ar{font-size:1.6rem;opacity:.5;transition:.15s}.mc:hover .ar{opacity:1;transform:translateX(4px)}.mc:hover .mi{background:#22c55e44}
+.ft2{margin-top:40px;padding:20px 0 8px;border-top:1px solid var(--line);text-align:center;opacity:.6;font-size:.85rem}
+.tab{transition:.15s}
+.sbrand{display:flex;align-items:center;gap:10px;padding:4px 8px 14px;margin-bottom:8px;border-bottom:1px solid var(--line);color:#fff;white-space:nowrap}
+.sbrand svg{flex:none;filter:drop-shadow(0 4px 8px #0008)}.sbrand b{display:block;font-size:1.3rem;font-weight:800;line-height:1}.sbrand i{font-style:normal;color:#BFF3D1;font-weight:600}
+.sbrand small{display:block;opacity:.6;font-size:.68rem;letter-spacing:1.2px;text-transform:uppercase;margin-top:4px}
+body.mini .sbrand{justify-content:center;padding-left:0;padding-right:0}body.mini .sbrand div{display:none}
+#sn{min-height:0;overflow-y:auto;overflow-x:hidden}
+.sh{margin:14px 10px 4px;font-size:.68rem;letter-spacing:1.2px;text-transform:uppercase;opacity:.5;white-space:nowrap}body.mini .sh{display:none}
+#sn button[data-out]{color:#fca5a5}#sn button[data-out]:hover{background:#7f1d1d55;color:#fff}
+.ra{margin:6px 4px 4px;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:#0B1B3A66;cursor:pointer}.ra:hover{background:#0B1B3A}.ra .sh{margin:0 0 6px}
+.rar{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.82rem;padding:3px 0;color:#C9D4E6;white-space:nowrap}.rar b{background:#ffffff1f;border-radius:99px;padding:0 8px;font-size:.75rem}
+.rar.top{color:#fff;font-weight:700}.rar.top b{background:#60a5fa;color:#031024}body.mini .ra{display:none}
+</style></head>
+<body>
+<header class="banner">
+  <button id="burger" aria-label="Plegar menú">☰</button>
+  <a class="logo" href="#" data-t="home" aria-label="CronoFutbol - Inicio">
+    <svg viewBox="0 0 48 48" width="44" height="44" aria-hidden="true">
+      <rect x="19" y="1" width="10" height="5" rx="2" fill="#fff"/>
+      <circle cx="24" cy="27" r="19" fill="#fff" stroke="#0A2A18" stroke-width="3"/>
+      <polygon points="24,16 32,22 29,31 19,31 16,22" fill="#0A2A18"/>
+      <path d="M24 16V9M32 22l7-3M29 31l5 7M19 31l-5 7M16 22l-7-3" stroke="#0A2A18" stroke-width="2.5"/>
+      <path d="M24 26V18" stroke="#22c55e" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <span class="logo-t">Crono<b>Futbol</b></span>
+  </a>
+  <div id="user"></div>
+</header>
+<div class="shell">
+  <aside id="side"><a class="sbrand" href="#" data-t="home" aria-label="CronoFutbol - Inicio"><svg viewBox="0 0 48 48" width="46" height="46" aria-hidden="true"><rect x="19" y="1" width="10" height="5" rx="2" fill="#fff"/><circle cx="24" cy="27" r="19" fill="#fff" stroke="#0A2A18" stroke-width="3"/><polygon points="24,16 32,22 29,31 19,31 16,22" fill="#0A2A18"/><path d="M24 16V9M32 22l7-3M29 31l5 7M19 31l-5 7M16 22l-7-3" stroke="#0A2A18" stroke-width="2.5"/><path d="M24 26V18" stroke="#22c55e" stroke-width="3" stroke-linecap="round"/></svg><div><b>Crono<i>Futbol</i></b><small>Gestor de torneos</small></div></a><nav id="sn"></nav><div id="ct"></div></aside>
+  <main>
+    <nav id="tabs"></nav>
+    <h2 id="title"></h2>
+    <section id="view"></section>
+    <footer class="ft2">© CronoFutbol · Gestor de torneos de fútbol</footer>
+  </main>
+</div>
+<dialog id="dd"></dialog>
+<dialog id="dlg"><form id="fa"></form></dialog>
+<div id="toast"></div>
+
+<script type="module">
+const LS = (() => { try { localStorage.setItem('_t', '1'); localStorage.removeItem('_t'); return localStorage; } catch { const m = {}; return { getItem: (k) => (k in m ? m[k] : null), setItem: (k, v) => { m[k] = String(v); }, removeItem: (k) => { delete m[k]; } }; } })();
+
+// ====== Configuración (cambia aquí tus contactos) ======
+let API = window.CRONO_API || (location.protocol === 'file:' ? 'http://127.0.0.1:8000/api' : '/api');
+const CONTACTOS = [
+  ['WhatsApp', 'https://wa.me/573000000000', '#25D366', 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z'],
+  ['Instagram', 'https://instagram.com/cronofutbol', 'linear-gradient(45deg,#F58529,#DD2A7B,#8134AF)', 'M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077'],
+  ['Facebook', 'https://facebook.com/cronofutbol', '#1877F2', 'M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z'],
+  ['TikTok', 'https://tiktok.com/@cronofutbol', '#000', 'M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z'],
+];
+
+// Datos de ejemplo: se usan solo si la API no responde
+const hoy = new Date().toISOString().slice(0, 10);
+const MOCK = {
+  torneos: [
+    { id: 1, nombre: 'Copa Crono 2026', categoria: 'Sub-17', descripcion: 'Torneo relámpago de fin de año', fecha_inicio: '2026-11-01', fecha_fin: '2026-12-10', estado: 'en_curso' },
+    { id: 2, nombre: 'Liga Barrial', categoria: 'Libre', descripcion: 'Temporada regular', fecha_inicio: '2026-03-01', fecha_fin: '2026-06-30', estado: 'finalizado' },
+  ],
+  equipos: [{ id: 1, nombre: 'Halcones FC' }, { id: 2, nombre: 'Titanes' }, { id: 3, nombre: 'Real Barrio' }, { id: 4, nombre: 'Rayo Verde' }],
+  jugadores: [
+    { id: 1, equipo_id: 1, nombre: 'Luis', apellido: 'Mora', posicion: 'Delantero', numero_camiseta: 9, estado: 'activo' },
+    { id: 2, equipo_id: 2, nombre: 'Andrés', apellido: 'Pino', posicion: 'Portero', numero_camiseta: 1, estado: 'activo' },
+    { id: 3, equipo_id: 3, nombre: 'Diego', apellido: 'Rey', posicion: 'Mediocampista', numero_camiseta: 8, estado: 'activo' },
+  ],
+  partidos: [
+    { id: 1, torneo_id: 1, equipo_local_id: 1, equipo_visitante_id: 2, fecha: '2026-11-05', hora: '16:00', lugar: 'Cancha Central', estado: 'programado' },
+    { id: 2, torneo_id: 1, equipo_local_id: 3, equipo_visitante_id: 4, fecha: hoy, hora: '18:00', lugar: 'Cancha Norte', estado: 'en_curso' },
+    { id: 3, torneo_id: 2, equipo_local_id: 2, equipo_visitante_id: 3, fecha: '2026-06-20', lugar: 'Cancha Sur', goles_local: 3, goles_visitante: 1, estado: 'finalizado' },
+  ],
+  inscripciones: [1, 2, 3, 4].map((e) => ({ id: e, torneo_id: 1, equipo_id: e, fecha_inscripcion: hoy, estado: 'activa' })).concat([{ id: 5, torneo_id: 2, equipo_id: 2 }, { id: 6, torneo_id: 2, equipo_id: 3 }]),
+  'estadisticas-jugadores': [
+    { jugador_id: 1, partido_id: 3, goles: 2, asistencias: 1, tarjetas_amarillas: 0, tarjetas_rojas: 0, minutos_jugados: 90 },
+    { jugador_id: 3, partido_id: 3, goles: 1, asistencias: 2, tarjetas_amarillas: 1, tarjetas_rojas: 0, minutos_jugados: 85 },
+    { jugador_id: 2, partido_id: 3, goles: 0, asistencias: 0, tarjetas_amarillas: 0, tarjetas_rojas: 0, minutos_jugados: 90 },
+  ],
+};
+
+// ====== Utilidades ======
+const $ = (s) => document.querySelector(s);
+const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const S = { tab: 'home', act: 1, q: '', mode: 'login', roles: [], d: {}, token: LS.getItem('t'), user: JSON.parse(LS.getItem('u') || 'null') };
+const d = (k) => S.d[k] || [];
+const day = (f) => String(f || '').slice(0, 10);
+const eqN = (id) => (d('equipos').find((e) => e.id == id) || {}).nombre || 'Equipo ' + id;
+const torN = (id) => { const t = d('torneos').find((x) => x.id == id); return t ? t.nombre : 'Sin torneo'; };
+const jugN = (id) => { const j = d('jugadores').find((x) => x.id == id); return j ? j.nombre + ' ' + j.apellido : 'Jugador ' + id; };
+const est = (e) => (e === true || e === 1 || e === '1' ? 'activo' : e === false || e === 0 || e === '0' ? 'inactivo' : e);
+const bd = (e0) => { const e = est(e0); return `<span class="bd ${esc(e)}">${e === 'en_curso' ? ' EN VIVO' : esc(String(e).replace('_', ' '))}</span>`; };
+const card = (h, b, v) => `<article class="card"${v ? ` data-v="${v}"` : ''}><h3>${h}</h3>${b}${v ? '<p class=more>Ver detalle ›</p>' : ''}</article>`;
+const grid = (a) => (a.length ? `<div class="grid">${a.join('')}</div>` : '<p class="empty">No hay registros para mostrar.</p>');
+const arm = (t) => { if (t.dataset.arm) return true; t.dataset.arm = 1; const o = t.textContent; t.textContent = '¿Seguro? Pulsa otra vez'; setTimeout(() => { if (t.isConnected) { delete t.dataset.arm; t.textContent = o; } }, 4000); return false; };
+const toast = (m) => { const t = $('#toast'); t.textContent = m; t.classList.remove('hide'); setTimeout(() => t.classList.add('hide'), 3500); };
+
+// ====== Modo demostración: API local (localStorage) cuando el servidor no responde ======
+const ROLES0 = ['Administrador', 'Director técnico', 'Jugador', 'Árbitro', 'Aficionado'];
+function mock(p, o) {
+  let x = JSON.parse(LS.getItem('mockdb') || 'null');
+  if (!x) x = { u: [], seq: 1000, t: JSON.parse(JSON.stringify(MOCK)), r: ROLES0.map((n, i) => ({ id: i + 1, nombre: n, estado: 'activo' })) };
+  const m = o.method || 'GET', b = o.body || {}, [, a, id] = p.split('?')[0].split('/');
+  const bad = (e) => Promise.reject({ errors: e, message: Object.values(e)[0][0] });
+  const ok = (v) => { LS.setItem('mockdb', JSON.stringify(x)); return Promise.resolve(JSON.parse(JSON.stringify(v ?? {}))); };
+  const pub = (u) => ({ id: u.id, nombre: u.nombre, apellido: u.apellido, email: u.email, telefono: u.telefono, estado: u.estado, rol_id: u.rol_id, rol: x.r.find((r) => r.id == u.rol_id) });
+  if (a === 'auth') {
+    if (id === 'register') {
+      if (x.u.some((u) => u.email === b.email)) return bad({ email: ['Este correo ya está registrado.'] });
+      if (b.password !== b.password_confirmation) return bad({ password: ['La confirmación de la contraseña no coincide.'] });
+      const u = { id: x.seq++, nombre: b.nombre, apellido: b.apellido, email: b.email, password: b.password, telefono: null, estado: 'activo', rol_id: x.u.length ? 5 : 1 };
+      x.u.push(u); return ok({ token: 'demo-' + u.id, usuario: pub(u) });
+    }
+    if (id === 'login') { const u = x.u.find((v) => v.email === b.email && v.password === b.password); return u ? ok({ token: 'demo-' + u.id, usuario: pub(u) }) : bad({ email: ['Las credenciales no son correctas.'] }); }
+    const u = x.u.find((v) => 'demo-' + v.id === S.token);
+    return u ? ok(id === 'me' ? pub(u) : {}) : Promise.reject({ message: 'No autenticado' });
+  }
+  if (a === 'usuarios') { if (m === 'PUT') { if (b.email && x.u.some((u) => u.email === b.email && u.id != id)) return bad({ email: ['Este correo ya está registrado.'] }); Object.assign(x.u.find((u) => u.id == id), b); } return ok(x.u.map(pub)); }
+  if (a === 'roles') { if (m === 'POST') x.r.push({ id: x.r.length + 1, ...b }); return ok(x.r); }
+  const L = (x.t[a] = x.t[a] || []);
+  if (m === 'POST') {
+    if (a === 'inscripciones' && L.some((v) => v.torneo_id == b.torneo_id && v.equipo_id == b.equipo_id)) return bad({ torneo_id: ['Este equipo ya está inscrito en el torneo seleccionado.'] });
+    const r = { id: x.seq++, ...b }; L.push(r); return ok(r);
+  }
+  if (m === 'PUT') { const r = L.find((v) => v.id == id); Object.assign(r, b); return ok(r); }
+  if (m === 'DELETE') { x.t[a] = L.filter((v) => v.id != id); return ok({}); }
+  return ok(L);
+}
+
+async function api(p, o = {}) {
+  if (S.live === 0) return mock(p, o);
+  const r = await fetch(API + p, {
+    method: o.method || 'GET',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json', ...(S.token ? { Authorization: 'Bearer ' + S.token } : {}) },
+    body: o.body ? JSON.stringify(o.body) : undefined,
+  }).catch(() => { throw { net: 1, message: 'No se pudo conectar con el servidor. ¿Está corriendo php artisan serve?' }; });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) { if (r.status === 401 && S.token) logout(true); throw Object.assign(j, { status: r.status, message: r.status === 404 ? 'Error 404: no existe ' + API + p + ' (revisa la dirección de la API)' : j.message || 'Error ' + r.status + ' del servidor' }); }
+  return j.data !== undefined ? j.data : j;
+}
+
+// ====== Sesión ======
+const save = () => { LS.setItem('t', S.token); LS.setItem('u', JSON.stringify(S.user)); };
+function logout(local) {
+  if (!local && S.token) api('/auth/logout', { method: 'POST' }).catch(() => {});
+  S.token = S.user = S.as = null; LS.removeItem('t'); LS.removeItem('u'); ui();
+}
+const nm = (v) => String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const rk = () => { if (!S.user) return ''; const n = nm(S.as || S.user.rol?.nombre); return n.includes('admin') ? 'admin' : n.includes('director') ? 'dt' : n.includes('jugador') ? 'jug' : n.includes('arbitro') ? 'arb' : 'afi'; };
+const isAdmin = () => nm(S.user?.rol?.nombre).includes('admin');
+const RN = { admin: 'Administrador', dt: 'Director técnico', jug: 'Jugador', arb: 'Árbitro', afi: 'Aficionado' };
+const miEq = () => d('equipos').find((e) => e.usuario_id == S.user?.id || (S.user && e.correo && e.correo === S.user.email));
+const jm = () => JSON.parse(LS.getItem('jm') || '{}');
+const miJug = () => d('jugadores').find((j) => j.usuario_id == S.user?.id || j.id == jm()[S.user?.id]);
+function can(en, a, r) {
+  const k = rk();
+  if (k === 'admin') return true;
+  if (k === 'dt') { const e = miEq(); if (en === 'equipos') return a === 'new' ? !e : r?.usuario_id == S.user.id; if (en === 'jugadores') return !!e && (a === 'new' || r?.equipo_id == e.id); return false; }
+  if (k === 'jug') return en === 'jugadores' && a !== 'del' && (a === 'new' ? !miJug() : r?.usuario_id == S.user.id);
+  if (k === 'arb') return (en === 'partidos' && a === 'edit') || (en === 'estadisticas-jugadores' && a === 'new');
+  return false;
+}
+const RP = '<p class=mut style="margin:4px 0">Elige tu rol</p><div class=rp>' + [['Jugador', 'Juega en un equipo'], ['Director técnico', 'Dirige y gestiona un equipo'], ['Árbitro', 'Dirige partidos y registra resultados'], ['Aficionado', 'Sigue torneos y resultados']].map(([n, t], i) => `<label class=rc><input type=radio name=rol value="${n}" ${i ? '' : 'checked'}><b>${n}</b><span>${t}</span></label>`).join('') + '</div>';
+const pwf = (n, ph, ac) => `<div class=pw><input name=${n} type=password class=inp placeholder="${ph}" minlength=8 autocomplete=${ac} required><button type=button class=eye data-eye aria-label="Mostrar u ocultar contraseña">👁</button></div>`;
+const authView = () => {
+  const r = S.tab === 'register';
+  return `<div class=auth><div class=ap><span class=pill>⚽ Gestor de torneos</span><h2>${r ? 'Crea tu cuenta y entra a la cancha' : 'Bienvenido de nuevo'}</h2><p>${r ? 'Regístrate en segundos y accede a tu menú principal con torneos, equipos y estadísticas.' : 'Inicia sesión para ir directo a tu menú principal.'}</p><ul><li>Inscribe equipos y programa partidos</li><li>Consulta tablas de posiciones y goleadores</li><li>Controla tus torneos en tiempo real</li></ul></div>
+  <form class=card data-f=auth><div class=seg><a href=# data-m=login class="${r ? '' : 'on'}">Iniciar sesión</a><a href=# data-m=register class="${r ? 'on' : ''}">Registrarme</a></div>${r ? '<input name=nombre class=inp placeholder=Nombre required><input name=apellido class=inp placeholder=Apellido required><p class=mut style="margin:0 0 10px;font-size:.85rem">' + (S.live ? 'Te registras como Aficionado; un administrador puede asignarte otro rol.' : 'Modo demostración: el primer usuario que se registra es administrador.') + '</p>' : ''}<input name=email type=email class=inp placeholder="Correo electrónico" autocomplete=email required>${pwf('password', 'Contraseña (mín. 8 caracteres)', r ? 'new-password' : 'current-password')}${r ? pwf('password_confirmation', 'Confirmar contraseña', 'new-password') : ''}<p id=er class=er></p><button class=btn>${r ? 'Crear cuenta y entrar' : 'Entrar al menú'}</button><p class=mut style="text-align:center;margin-top:10px">${r ? '¿Ya tienes cuenta?' : '¿Aún no tienes cuenta?'} <a href=# data-m=${r ? 'login' : 'register'} style="color:#BFF3D1;font-weight:700">${r ? 'Inicia sesión' : 'Regístrate gratis'}</a></p></form></div>`;
+};
+
+// ====== Formularios CRUD ======
+const EST = ['programado', 'en_curso', 'finalizado', 'cancelado'];
+const equiposOp = () => d('equipos').map((e) => [e.id, e.nombre]);
+const E = {
+  torneos: ['torneo', [['nombre', 'Nombre'], ['categoria', 'Categoría'], ['descripcion', 'Descripción'], ['fecha_inicio', 'Fecha de inicio', 'date'], ['fecha_fin', 'Fecha de fin', 'date'], ['estado', 'Estado', EST]]],
+  equipos: ['equipo', [['nombre', 'Nombre'], ['entrenador', 'Entrenador'], ['telefono', 'Teléfono'], ['correo', 'Correo', 'email'], ['estado', 'Estado', ['activo', 'inactivo']]]],
+  jugadores: ['jugador', [['equipo_id', 'Equipo', equiposOp], ['nombre', 'Nombre'], ['apellido', 'Apellido'], ['documento', 'Documento'], ['fecha_nacimiento', 'Fecha de nacimiento', 'date'], ['posicion', 'Posición', ['Portero', 'Defensa', 'Mediocampista', 'Delantero']], ['numero_camiseta', 'Dorsal', 'number'], ['telefono', 'Teléfono'], ['estado', 'Estado', ['activo', 'inactivo']]]],
+  inscripciones: ['inscripción', [['equipo_id', 'Equipo', equiposOp]]],
+  'estadisticas-jugadores': ['estadística', [['jugador_id', 'Jugador', () => d('jugadores').map((j) => [j.id, j.nombre + ' ' + j.apellido])], ['partido_id', 'Partido', () => d('partidos').map((p) => [p.id, `${eqN(p.equipo_local_id)} vs ${eqN(p.equipo_visitante_id)} (${day(p.fecha)})`])], ['goles', 'Goles', 'number'], ['asistencias', 'Asistencias', 'number'], ['tarjetas_amarillas', 'Tarjetas amarillas', 'number'], ['tarjetas_rojas', 'Tarjetas rojas', 'number'], ['minutos_jugados', 'Minutos jugados', 'number']]],
+  partidos: ['partido', [['torneo_id', 'Torneo', () => [['', 'Sin torneo'], ...d('torneos').map((t) => [t.id, t.nombre])]], ['equipo_local_id', 'Equipo local', equiposOp], ['equipo_visitante_id', 'Equipo visitante', equiposOp], ['fecha', 'Fecha', 'date'], ['hora', 'Hora', 'time'], ['lugar', 'Lugar'], ['goles_local', 'Goles local', 'number'], ['goles_visitante', 'Goles visitante', 'number'], ['estado', 'Estado', EST]]],
+};
+// Campos que el backend exige (para avisar antes de enviar el formulario)
+const REQ = ['torneos.nombre', 'torneos.fecha_inicio', 'equipos.nombre', 'jugadores.nombre', 'jugadores.apellido', 'jugadores.documento', 'jugadores.fecha_nacimiento', 'partidos.fecha'];
+const adm = (en, id) => {
+  if (!S.user) return '';
+  const r = d(en).find((x) => x.id == id), k = rk(), b = [];
+  if (can(en, 'edit', r)) b.push(`<button class=sm data-e="${en}:${id}">${k === 'arb' ? 'Registrar resultado' : 'Editar'}</button>`);
+  if (can(en, 'del', r)) b.push(`<button class="sm dg" data-del="${en}:${id}">Eliminar</button>`);
+  if (en === 'torneos') { const q = miEq(); if (k === 'admin') b.push(`<button class=sm data-i=${id}>Inscribir equipo</button><button class=sm data-p=${id}>+ Partido</button>`); else if (k === 'dt' && q) b.push(d('inscripciones').some((i) => i.torneo_id == id && i.equipo_id == q.id) ? '<span class=bd>Inscrito</span>' : `<button class=sm data-i=${id}>Inscribir mi equipo</button>`); }
+  return b.length ? `<p class=acts>${b.join('')}</p>` : '';
+};
+const nuevo = (en, l) => (S.user && can(en, 'new') ? `<p><button class=btn data-e="${en}:new">+ ${l}</button></p>` : '');
+const kv = (a) => '<dl class=kv>' + a.filter((x) => x[1] !== undefined && x[1] !== null && x[1] !== '').map(([l, v]) => `<dt>${l}</dt><dd>${v}</dd>`).join('') + '</dl>';
+const totJ = (id) => d('estadisticas-jugadores').filter((s) => s.jugador_id == id).reduce((a, s) => ({ g: a.g + +s.goles, a: a.a + +s.asistencias, y: a.y + +s.tarjetas_amarillas, r: a.r + +s.tarjetas_rojas, m: a.m + +s.minutos_jugados, p: a.p + 1 }), { g: 0, a: 0, y: 0, r: 0, m: 0, p: 0 });
+const tabla = (tid) => {
+  const m = {}, add = (e) => (m[e] = m[e] || { id: e, pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0 });
+  d('inscripciones').filter((i) => i.torneo_id == tid).forEach((i) => add(i.equipo_id));
+  const ps = d('partidos').filter((p) => p.torneo_id == tid);
+  ps.forEach((p) => { add(p.equipo_local_id); add(p.equipo_visitante_id); });
+  ps.filter((p) => p.estado === 'finalizado' && p.goles_local != null && p.goles_visitante != null).forEach((p) => {
+    const a = m[p.equipo_local_id], b = m[p.equipo_visitante_id], gl = +p.goles_local, gv = +p.goles_visitante;
+    a.pj++; b.pj++; a.gf += gl; a.gc += gv; b.gf += gv; b.gc += gl;
+    if (gl > gv) { a.g++; b.p++; } else if (gl < gv) { b.g++; a.p++; } else { a.e++; b.e++; }
+  });
+  return Object.values(m).map((x) => ({ ...x, dg: x.gf - x.gc, pts: x.g * 3 + x.e })).sort((a, b) => b.pts - a.pts || b.dg - a.dg || b.gf - a.gf);
+};
+const tablaH = (tid) => { const t = tabla(tid); return '<h4>Tabla de posiciones</h4>' + (t.length ? `<div class=tw><table><tr><th>#</th><th>Equipo</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>GF</th><th>GC</th><th>DG</th><th>Pts</th></tr>${t.map((x, i) => `<tr><td>${i + 1}</td><td>${esc(eqN(x.id))}</td><td>${x.pj}</td><td>${x.g}</td><td>${x.e}</td><td>${x.p}</td><td>${x.gf}</td><td>${x.gc}</td><td>${x.dg}</td><td><b>${x.pts}</b></td></tr>`).join('')}</table></div>` : '<p class=mut>Aún no hay equipos inscritos.</p>'); };
+const golH = (tid) => {
+  const ps = new Set(d('partidos').filter((p) => p.torneo_id == tid).map((p) => p.id)), m = {};
+  d('estadisticas-jugadores').filter((s) => ps.has(s.partido_id)).forEach((s) => (m[s.jugador_id] = (m[s.jugador_id] || 0) + +s.goles));
+  const r = Object.entries(m).filter((x) => x[1] > 0).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  return '<h4>Goleadores</h4>' + (r.length ? `<table>${r.map(([id, g]) => `<tr><td>${esc(jugN(id))}</td><td>${esc(eqN((d('jugadores').find((j) => j.id == id) || {}).equipo_id))}</td><td><b>${g}</b> goles</td></tr>`).join('')}</table>` : '<p class=mut>Sin goles registrados.</p>');
+};
+function openDetail(en, id) {
+  const r = d(en).find((x) => x.id == id);
+  if (!r) return;
+  let h = '';
+  if (en === 'torneos') {
+    const ins = d('inscripciones').filter((i) => i.torneo_id == id), ps = d('partidos').filter((p) => p.torneo_id == id);
+    h = `<h3>${esc(r.nombre)} ${bd(r.estado)}</h3>` + kv([['Categoría', esc(r.categoria)], ['Descripción', esc(r.descripcion)], ['Inicio', day(r.fecha_inicio)], ['Fin', day(r.fecha_fin)], ['Equipos inscritos', ins.length ? ins.map((i) => esc(eqN(i.equipo_id)) + (isAdmin() ? ` <button class="sm dg" data-del="inscripciones:${i.id}" title="Quitar del torneo">×</button>` : '')).join(' · ') : 'Ninguno']])
+      + tablaH(id) + golH(id) + `<h4>Partidos del torneo (${ps.length})</h4>` + (ps.length ? `<div class=grid1>${byDate(ps).map(mCard).join('')}</div>` : '<p class=mut>Sin partidos registrados.</p>');
+  } else if (en === 'equipos') {
+    const js = d('jugadores').filter((j) => j.equipo_id == id), ts = d('inscripciones').filter((i) => i.equipo_id == id).map((i) => esc(torN(i.torneo_id)));
+    h = `<h3>${esc(r.nombre)} ${bd(r.estado)}</h3>` + kv([['Entrenador', esc(r.entrenador)], ['Teléfono', esc(r.telefono)], ['Correo', esc(r.correo)], ['Registrado', day(r.fecha_registro)], ['Torneos', ts.length ? ts.join(', ') : 'Sin inscripciones']])
+      + `<h4>Plantilla (${js.length})</h4>` + (js.length ? `<table>${js.map((j) => `<tr class=ck data-v="jugadores:${j.id}"><td>#${esc(j.numero_camiseta ?? '-')}</td><td>${esc(j.nombre)} ${esc(j.apellido)}</td><td>${esc(j.posicion || '')}</td></tr>`).join('')}</table>` : '<p class=mut>Sin jugadores registrados.</p>');
+  } else if (en === 'jugadores') {
+    const t = totJ(id);
+    h = `<h3>${esc(r.nombre)} ${esc(r.apellido)} ${bd(r.estado)}</h3>` + kv([['Equipo', esc(eqN(r.equipo_id))], ['Posición', esc(r.posicion)], ['Dorsal', esc(r.numero_camiseta)], ['Documento', esc(r.documento)], ['Nacimiento', day(r.fecha_nacimiento)], ['Teléfono', esc(r.telefono)]])
+      + '<h4>Estadísticas acumuladas</h4>' + kv([['Partidos con registro', t.p], ['Goles', t.g], ['Asistencias', t.a], ['Tarjetas amarillas', t.y], ['Tarjetas rojas', t.r], ['Minutos jugados', t.m]]);
+  } else {
+    const ss = d('estadisticas-jugadores').filter((s) => s.partido_id == id);
+    h = `<h3>Partido ${bd(r.estado)}</h3><div class=vs><b>${esc(eqN(r.equipo_local_id))}</b><span class=sc>${r.goles_local ?? '-'} : ${r.goles_visitante ?? '-'}</span><b>${esc(eqN(r.equipo_visitante_id))}</b></div>` + kv([['Torneo', esc(torN(r.torneo_id))], ['Fecha', day(r.fecha)], ['Hora', esc(String(r.hora || '').slice(0, 5))], ['Lugar', esc(r.lugar)]])
+      + '<h4>Rendimiento de jugadores</h4>' + (ss.length ? `<table><tr><th>Jugador</th><th>G</th><th>A</th><th>TA</th><th>TR</th><th>Min</th></tr>${ss.map((s) => `<tr><td>${esc(jugN(s.jugador_id))}</td><td>${s.goles}</td><td>${s.asistencias}</td><td>${s.tarjetas_amarillas}</td><td>${s.tarjetas_rojas}</td><td>${s.minutos_jugados}'</td></tr>`).join('')}</table>` : '<p class=mut>Sin estadísticas registradas para este partido.</p>');
+  }
+  $('#dd').innerHTML = h + adm(en, id) + '<p style="text-align:center;margin-top:14px"><a href=# data-xd style="color:#BFF3D1">Cerrar</a></p>';
+  if (!$('#dd').open) $('#dd').showModal();
+}
+function openPerfil(m) {
+  const u = S.user;
+  $('#fa').dataset.f = 'perfil';
+  $('#fa').innerHTML = (m === 'pass'
+    ? '<h3 class=ft>Cambiar contraseña</h3>' + pwf('password', 'Nueva contraseña (mín. 8)', 'new-password') + pwf('password_confirmation', 'Confirmar nueva contraseña', 'new-password')
+    : `<h3 class=ft>Editar perfil</h3><label class=fl>Nombre<input name=nombre class=inp value="${esc(u.nombre)}" required></label><label class=fl>Apellido<input name=apellido class=inp value="${esc(u.apellido)}" required></label><label class=fl>Correo electrónico<input name=email type=email class=inp value="${esc(u.email)}" required autocomplete=email></label><label class=fl>Teléfono<input name=telefono class=inp value="${esc(u.telefono || '')}"></label>`)
+    + '<p id=er class=er></p><button class=btn>Guardar</button><a href=# data-x>Cancelar</a>';
+  $('#dlg').showModal();
+}
+function openForm(en, id, pre0) {
+  const [nom, fs] = E[en], r = id === 'new' ? {} : d(en).find((x) => x.id == id) || {}, k = rk(), me = miEq();
+  const pre = { ...(id !== 'new' ? {} : { ...(en === 'equipos' && k === 'dt' ? { usuario_id: S.user.id, correo: S.user.email, estado: 'activo' } : {}), ...(en === 'jugadores' && k === 'dt' && me ? { equipo_id: me.id, estado: 'activo' } : {}), ...(en === 'jugadores' && k === 'jug' ? { usuario_id: S.user.id, estado: 'activo' } : {}) }), ...(pre0 || {}) };
+  const only = k === 'arb' && en === 'partidos' ? ['goles_local', 'goles_visitante', 'estado'] : null;
+  S.ed = [en, id]; S.pre = pre;
+  $('#fa').dataset.f = 'crud';
+  const tit = en === 'inscripciones' ? 'Inscribir equipo en el torneo' : only ? 'Registrar resultado' : `${id === 'new' ? 'Nuevo' : 'Editar'} ${nom}`;
+  $('#fa').innerHTML = `<h3 class=ft>${tit}</h3>` + fs.filter(([kk]) => !(kk in pre) && (!only || only.includes(kk))).map(([kk, l, t]) => {
+    let v = r[kk] ?? '';
+    if (t === 'number' && id === 'new' && en === 'estadisticas-jugadores') v = 0;
+    if (kk === 'estado') v = est(v) || ''; if (t === 'date') v = day(v); if (kk === 'hora') v = String(v).slice(0, 5);
+    if (Array.isArray(t) || typeof t === 'function') return `<label class=fl>${l}<select name=${kk} class=inp>${(typeof t === 'function' ? t() : t.map((x) => [x, x])).map(([a, b]) => `<option value="${esc(a)}" ${a == v ? 'selected' : ''}>${esc(b)}</option>`).join('')}</select></label>`;
+    return `<label class=fl>${l}<input name=${kk} type=${t || 'text'} value="${esc(v)}" class=inp ${REQ.includes(en + '.' + kk) ? 'required' : ''}></label>`;
+  }).join('') + '<p id=er class=er></p><button class=btn>Guardar</button><a href=# data-x>Cancelar</a>';
+  $('#dlg').showModal();
+}
+async function loadAdmin() {
+  if (!isAdmin()) return;
+  try { S.roles = await api('/roles'); S.d.usuarios = await api('/usuarios'); } catch {}
+}
+async function reload() {
+  const k = ['torneos', 'equipos', 'jugadores', 'partidos', 'estadisticas-jugadores', 'inscripciones'];
+  (await Promise.allSettled(k.map((x) => api('/' + x)))).forEach((r, i) => { if (r.status === 'fulfilled') S.d[k[i]] = r.value; });
+  await loadAdmin();
+}
+async function onSubmit(f) {
+  const sb = f.querySelector('.btn');
+  if (sb) { sb.dataset.t0 = sb.textContent; sb.disabled = true; sb.innerHTML = '<span class=spin></span> Procesando…'; }
+  try {
+    if (f.dataset.f === 'auth') {
+      const reg = S.tab === 'register', r = await api('/auth/' + S.tab, { method: 'POST', body: Object.fromEntries(new FormData(f)) });
+      S.token = r.token; S.user = r.usuario; S.as = null; save(); S.tab = 'home'; await loadAdmin(); ui(); scrollTo(0, 0); toast((reg ? '¡Cuenta creada! Bienvenido, ' : 'Bienvenido de nuevo, ') + r.usuario.nombre);
+    } else if (f.dataset.f === 'perfil') {
+      const b = Object.fromEntries(new FormData(f)), u = S.user;
+      if (b.password && b.password !== b.password_confirmation) throw { message: 'La confirmación de la contraseña no coincide.' };
+      const body = { rol_id: u.rol?.id, nombre: b.nombre ?? u.nombre, apellido: b.apellido ?? u.apellido, email: (b.email ?? u.email).trim(), telefono: (b.telefono ?? u.telefono) || null, estado: u.estado || 'activo' };
+      if (b.password) body.password = b.password;
+      await api('/usuarios/' + u.id, { method: 'PUT', body });
+      S.user = { ...u, nombre: body.nombre, apellido: body.apellido, email: body.email, telefono: body.telefono }; save(); $('#dlg').close(); ui(); toast(b.password ? 'Contraseña actualizada' : body.email !== u.email ? 'Correo actualizado. Desde ahora inicia sesión con ' + body.email : 'Perfil actualizado');
+    } else {
+      const [en, id] = S.ed, body = Object.fromEntries(new FormData(f));
+      for (const k in body) if (body[k] === '') body[k] = null;
+      Object.assign(body, S.pre || {});
+      const rs = await api('/' + en + (id === 'new' ? '' : '/' + id), { method: id === 'new' ? 'POST' : 'PUT', body });
+      if (en === 'jugadores' && id === 'new' && rk() === 'jug' && rs?.id) LS.setItem('jm', JSON.stringify({ ...jm(), [S.user.id]: rs.id }));
+      $('#dlg').close(); await reload(); render(); if (en === 'inscripciones' || (en === 'partidos' && S.pre?.torneo_id)) openDetail('torneos', body.torneo_id); toast('Guardado correctamente');
+    }
+  } catch (x) { const m = Object.values(x.errors || {})[0]?.[0] || x.message || 'No se pudo conectar con el servidor'; ($('#er') || {}).textContent = m; toast(m); } finally { if (sb?.isConnected) { sb.disabled = false; sb.textContent = sb.dataset.t0; } }
+}
+const go = (f) => { if (f.reportValidity()) onSubmit(f); };
+document.addEventListener('submit', (e) => { e.preventDefault(); go(e.target); });
+document.addEventListener('click', (e) => { const b = e.target.closest('form[data-f] button.btn'); if (!b || b.type === 'button') return; e.preventDefault(); go(b.closest('form')); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.form?.dataset.f) { e.preventDefault(); go(e.target.form); } });
+
+// ====== Vistas ======
+const tCard = (t) => card(esc(t.nombre) + bd(t.estado), `<p>Categoría: ${esc(t.categoria || 'General')}</p><p class=mut>${esc(t.descripcion)}</p><p>Periodo: ${day(t.fecha_inicio)} → ${day(t.fecha_fin) || '—'}</p><p class=mut>${d('inscripciones').filter((i) => i.torneo_id == t.id).length} equipos · ${d('partidos').filter((p) => p.torneo_id == t.id).length} partidos</p>` + adm('torneos', t.id), 'torneos:' + t.id);
+const mCard = (p) => card(esc(torN(p.torneo_id)) + bd(p.estado),
+  `<div class=vs><b>${esc(eqN(p.equipo_local_id))}</b><span class=sc>${p.goles_local ?? '-'} : ${p.goles_visitante ?? '-'}</span><b>${esc(eqN(p.equipo_visitante_id))}</b></div><p>Lugar: ${esc(p.lugar || 'Por definir')}</p><p class=mut> ${day(p.fecha)} ${esc(String(p.hora || '').slice(0, 5))}</p>` + adm('partidos', p.id), 'partidos:' + p.id);
+const byDate = (a) => [...a].sort((x, y) => day(x.fecha).localeCompare(day(y.fecha)));
+const jCards = () => {
+  const q = S.q.toLowerCase();
+  return grid(d('jugadores').filter((j) => `${j.nombre} ${j.apellido} ${eqN(j.equipo_id)} ${j.posicion}`.toLowerCase().includes(q)).map((j) =>
+    card(`<span>${esc(j.nombre)} ${esc(j.apellido)}</span><span class=sc>#${esc(j.numero_camiseta ?? '-')}</span>`, `<p>Equipo: ${esc(eqN(j.equipo_id))}</p><p>Posición: ${esc(j.posicion || 'Sin posición')}</p>${bd(j.estado)}` + adm('jugadores', j.id), 'jugadores:' + j.id)));
+};
+const jc = (j) => card(`<span>${esc(j.nombre)} ${esc(j.apellido)}</span><span class=sc>#${esc(j.numero_camiseta ?? '-')}</span>`, `<p>Posición: ${esc(j.posicion || 'Sin posición')}</p>${bd(j.estado)}` + adm('jugadores', j.id), 'jugadores:' + j.id);
+const kp = (n, l) => `<article class=card><h3>${n}</h3><p class=mut>${l}</p></article>`;
+const prox = () => d('partidos').filter((p) => ['programado', 'en_curso'].includes(p.estado));
+const mios = (id) => prox().filter((p) => p.equipo_local_id == id || p.equipo_visitante_id == id);
+function homeRole(k) {
+  const pr = prox(), bt = (en, l) => (can(en, 'new') ? `<button class=btn data-e="${en}:new">${l}</button>` : '');
+  if (k === 'admin') return `<div class=grid>${kp(d('torneos').filter((t) => ['en_curso', 'programado'].includes(t.estado)).length, 'Torneos activos')}${kp(d('equipos').length, 'Equipos')}${kp(d('jugadores').length, 'Jugadores')}${kp(d('partidos').length, 'Partidos')}${kp(d('usuarios').length, 'Usuarios')}</div><p class=qa>${bt('torneos', '+ Nuevo torneo')}${bt('equipos', '+ Nuevo equipo')}${bt('partidos', '+ Nuevo partido')}</p><h3 class=sec>Próximos partidos</h3>` + grid(byDate(pr).slice(0, 3).map(mCard));
+  if (k === 'dt') {
+    const e = miEq();
+    if (!e) return info('Aún no tienes un equipo', `<p>Crea tu equipo para gestionar tu plantilla e inscribirlo en torneos.</p><p class=qa>${bt('equipos', 'Crear mi equipo')}</p>`);
+    const js = d('jugadores').filter((j) => j.equipo_id == e.id), ins = d('inscripciones').filter((i) => i.equipo_id == e.id);
+    return `<div class=grid>${kp(esc(e.nombre), 'Mi equipo')}${kp(js.length, 'Jugadores en plantilla')}${kp(ins.length, 'Torneos inscritos')}${kp(mios(e.id).length, 'Partidos por jugar')}</div><p class=qa>${bt('jugadores', '+ Agregar jugador')}<button class="btn alt" data-t=torneos>Inscribir en un torneo</button></p><h3 class=sec>Mis próximos partidos</h3>` + grid(byDate(mios(e.id)).slice(0, 3).map(mCard));
+  }
+  if (k === 'jug') {
+    const j = miJug();
+    if (!j) return info('Completa tu perfil de jugador', `<p>Registra tus datos para aparecer en tu equipo y en las estadísticas.</p><p class=qa>${bt('jugadores', 'Crear mi perfil')}</p>`);
+    const t = totJ(j.id);
+    return `<div class=grid>${kp('#' + esc(j.numero_camiseta ?? '-'), esc(j.nombre + ' ' + j.apellido))}${kp(t.g, 'Goles')}${kp(t.a, 'Asistencias')}${kp(t.p, 'Partidos con registro')}</div><h3 class=sec>Próximos partidos de mi equipo</h3>` + grid(byDate(mios(j.equipo_id)).slice(0, 3).map(mCard));
+  }
+  if (k === 'arb') return `<div class=grid>${kp(pr.length, 'Partidos por arbitrar')}${kp(pr.filter((p) => p.estado === 'en_curso').length, 'En juego ahora')}${kp(d('partidos').filter((p) => p.estado === 'finalizado').length, 'Partidos finalizados')}</div><p class=qa>${bt('estadisticas-jugadores', '+ Registrar estadística')}</p><h3 class=sec>Partidos por arbitrar</h3>` + grid(byDate(pr).slice(0, 6).map(mCard));
+  return '';
+}
+const info = (h, b) => `<div class=card>${`<h3>${h}</h3>`}${b}</div>`;
+
+const V = {
+  home: () => {
+    if (rk() && rk() !== 'afi') return homeRole(rk());
+    const pr = d('partidos').filter((p) => ['programado', 'en_curso'].includes(p.estado)), kp = (n, l) => `<article class=card><h3>${n}</h3><p class=mut>${l}</p></article>`;
+    return `<div class=grid>${kp(d('torneos').filter((t) => ['en_curso', 'programado'].includes(t.estado)).length, 'Torneos activos')}${kp(d('equipos').length, 'Equipos')}${kp(d('jugadores').length, 'Jugadores')}${kp(pr.length, 'Partidos por jugar')}</div><h3 class=sec>Próximos partidos</h3>` + grid(byDate(pr).slice(0, 3).map(mCard));
+  },
+  login: authView,
+  register: authView,
+  equipos: () => nuevo('equipos', 'Nuevo equipo') + grid(d('equipos').map((q) => card(esc(q.nombre) + bd(q.estado), `<p>Entrenador: ${esc(q.entrenador || '—')}</p><p>Jugadores: ${d('jugadores').filter((j) => j.equipo_id == q.id).length}</p>` + adm('equipos', q.id), 'equipos:' + q.id))),
+  notif: () => grid((d('notificaciones') || []).map((n) => card(esc(n.titulo), `<p>${esc(n.mensaje)}</p><p class=mut>${day(n.fecha_envio)}</p>`))),
+  torneos: () => nuevo('torneos', 'Nuevo torneo') + grid(d('torneos').map(tCard)),
+  mine: () => { if (!S.user) return info('Inicia sesión', '<p>Entra para ver tus torneos.</p>'); const q = miEq(), ts = rk() === 'dt' && q ? d('torneos').filter((t) => d('inscripciones').some((i) => i.torneo_id == t.id && i.equipo_id == q.id)) : d('torneos'); return nuevo('torneos', 'Nuevo torneo') + grid(ts.map(tCard)); },
+  usuarios: () => {
+    const rn = (u) => (S.roles.find((r) => r.id == u.rol_id) || u.rol || {}).nombre || '';
+    const us = [...d('usuarios')].sort((a, b) => RO(rn(a)) - RO(rn(b)) || String(a.nombre).localeCompare(String(b.nombre)));
+    const ops = (u) => S.roles.filter((r) => rolOn(r) || r.id == u.rol_id).sort((a, b) => RO(a.nombre) - RO(b.nombre));
+    const res = rolAct().map((r) => `<article class=card${RO(r.nombre) === 0 ? ' style="border-color:#60a5fa"' : ''}><h3>${nUs(r)}</h3><p class=mut>${esc(r.nombre)} activos</p></article>`);
+    return (ROLES0.some((n) => !S.roles.some((r) => nm(r.nombre) === nm(n))) ? '<p><button class=btn data-mkroles>Crear roles básicos</button></p>' : '')
+      + (res.length ? `<h3 class=sec style="margin-top:0">Roles activos</h3><div class=grid>${res.join('')}</div><h3 class=sec>Usuarios</h3>` : '')
+      + `<div class=card><div class=tw><table><tr><th>Usuario</th><th>Correo</th><th>Rol</th><th>Estado</th></tr>${us.map((u) => `<tr><td>${esc(u.nombre)} ${esc(u.apellido)}</td><td>${esc(u.email)}</td><td><select class=sel data-ur=${u.id}>${ops(u).map((r) => `<option value=${r.id} ${u.rol_id == r.id ? 'selected' : ''}>${esc(r.nombre)}</option>`).join('')}</select></td><td>${bd(u.estado)}</td></tr>`).join('')}</table></div></div>`;
+  },
+  mi: () => {
+    if (rk() === 'dt') {
+      const e = miEq(); if (!e) return homeRole('dt');
+      const js = d('jugadores').filter((j) => j.equipo_id == e.id);
+      return `<article class=card><h3>${esc(e.nombre)} ${bd(e.estado)}</h3>${kv([['Entrenador', esc(e.entrenador)], ['Teléfono', esc(e.telefono)], ['Correo', esc(e.correo)]])}${adm('equipos', e.id)}</article><h3 class=sec>Plantilla (${js.length})</h3>${nuevo('jugadores', 'Agregar jugador')}` + grid(js.map(jc));
+    }
+    const j = miJug(); if (!j) return homeRole('jug');
+    const t = totJ(j.id);
+    return `<article class=card><h3>${esc(j.nombre)} ${esc(j.apellido)} ${bd(j.estado)}</h3>${kv([['Equipo', esc(eqN(j.equipo_id))], ['Posición', esc(j.posicion)], ['Dorsal', esc(j.numero_camiseta)], ['Documento', esc(j.documento)], ['Nacimiento', day(j.fecha_nacimiento)]])}<h4 class=sec>Mis estadísticas</h4>${kv([['Partidos con registro', t.p], ['Goles', t.g], ['Asistencias', t.a], ['Tarjetas amarillas', t.y], ['Tarjetas rojas', t.r], ['Minutos', t.m]])}${adm('jugadores', j.id)}</article>`;
+  },
+  jugadores: () => nuevo('jugadores', 'Nuevo jugador') + `<input id=q class=inp placeholder=" Buscar jugador, equipo o posición…" value="${esc(S.q)}"><div id=gj>${jCards()}</div>`,
+  stats: () => {
+    const m = {};
+    d('estadisticas-jugadores').forEach((s) => { const a = (m[s.jugador_id] ??= { g: 0, a: 0, y: 0, r: 0, m: 0, p: 0 }); a.g += +s.goles; a.a += +s.asistencias; a.y += +s.tarjetas_amarillas; a.r += +s.tarjetas_rojas; a.m += +s.minutos_jugados; a.p++; });
+    const rows = Object.entries(m).sort((x, y) => y[1].g - x[1].g), max = Math.max(1, ...rows.map((r) => r[1].g));
+    return nuevo('estadisticas-jugadores', 'Registrar estadística') + (rows.length
+      ? `<div class=card><div class=tw><table><tr><th>#</th><th>Jugador</th><th>Equipo</th><th>PJ</th><th>G</th><th>A</th><th>TA</th><th>TR</th><th>Min</th><th></th></tr>${rows.map(([id, a], i) => `<tr data-v="jugadores:${id}" class=ck><td>${i + 1}</td><td>${esc(jugN(id))}</td><td>${esc(eqN((d('jugadores').find((j) => j.id == id) || {}).equipo_id))}</td><td>${a.p}</td><td>${a.g}</td><td>${a.a}</td><td>${a.y}</td><td>${a.r}</td><td>${a.m}'</td><td style="min-width:90px"><div class=bar><i style="width:${(a.g / max) * 100}%"></i></div></td></tr>`).join('')}</table></div></div><p class=mut style="margin-top:12px">PJ partidos con registro · G goles · A asistencias · TA tarjetas amarillas · TR tarjetas rojas · Min minutos. Haz clic en un jugador para ver su detalle.</p>`
+      : `<p class=empty>Aún no hay estadísticas registradas. ${S.user ? 'Usa "Registrar estadística".' : 'Inicia sesión para registrarlas.'}</p>`);
+  },
+  activos: () => `<p><button class="btn ${S.act ? '' : 'alt'}" data-a=1> Activos</button> <button class="btn ${S.act ? 'alt' : ''}" data-a=0> Inactivos</button></p><br>`
+    + grid(d('torneos').filter((t) => (['en_curso', 'programado'].includes(t.estado) ? 1 : 0) == S.act).map(tCard)),
+  proximos: () => nuevo('partidos', 'Nuevo partido') + grid(byDate(d('partidos').filter((p) => ['programado', 'en_curso'].includes(p.estado))).map(mCard)),
+  jugados: () => grid(byDate(d('partidos').filter((p) => p.estado === 'finalizado')).reverse().map(mCard)),
+  perfil: () => info(' Mi perfil', S.user ? `<p>${esc(S.user.nombre)} ${esc(S.user.apellido)}</p><p>Correo: ${esc(S.user.email)}</p><p>Teléfono: ${esc(S.user.telefono || '—')}</p><p>Rol: ${esc(S.user.rol?.nombre || '—')}</p><p class=acts><button class=btn data-pf=perfil>Editar perfil</button><button class="btn alt" data-pf=pass>Cambiar contraseña</button></p>` : '<p>Inicia sesión.</p>'),
+  config: () => info(' Configuración', `<p class=mut>Preferencias de la aplicación</p><p class=qa><button class=btn data-cfg=side>${document.body.classList.contains('mini') ? 'Expandir' : 'Plegar'} barra lateral</button>${S.user ? '<button class="btn alt" data-pf=perfil>Editar perfil</button><button class="btn alt" data-pf=pass>Cambiar contraseña</button><button class="btn alt" data-out>Cerrar sesión</button>' : ''}${S.live === 0 ? '<button class="btn alt" data-cfg=reset>Restablecer datos de demostración</button>' : ''}</p>`),
+  about: () => info(' Sobre nosotros', '<p>CronoFutbol organiza torneos de fútbol: inscripciones, partidos, resultados y estadísticas, todo en un solo lugar.</p>'),
+  who: () => info(' Quiénes somos', '<p>Un equipo de desarrolladores apasionados por el fútbol que quiere que cada torneo, grande o barrial, se viva como una final.</p>'),
+  guide: () => info(' Cómo usar CronoFutbol', '<p>1. Explora torneos, jugadores y partidos con las pestañas.</p><p>2. Regístrate o inicia sesión arriba a la derecha.</p><p>3. Consulta tus torneos en la barra lateral.</p><p>4. Revisa estadísticas y goleadores.</p>'),
+};
+const MI = { torneos: ['🏆', 'Consulta e inscríbete en torneos'], equipos: ['🛡️', 'Equipos registrados'], jugadores: ['⚽', 'Busca jugadores y su detalle'], mi: ['👤', 'Tu perfil o tu equipo'], proximos: ['📅', 'Partidos por jugar'], jugados: ['✅', 'Resultados finalizados'], stats: ['📊', 'Goleadores y estadísticas'], usuarios: ['🔑', 'Gestiona usuarios y roles'], activos: ['🟢', 'Torneos activos e inactivos'] };
+const menuH = () => `<section class=wel><span class=av>${esc(S.user.nombre.charAt(0).toUpperCase())}</span><div><h3>¡Hola, ${esc(S.user.nombre)}!</h3><p>Rol: <span class=bd>${RN[rk()]}</span> · ¿Qué quieres hacer hoy?</p></div></section><div class=grid>${(TB[rk()] || PUB).filter((k) => k !== 'home' && MI[k]).map((k) => `<article class="card mc" data-t=${k}><b class=mi>${MI[k][0]}</b><div><h3>${lbl(k)}</h3><p class=mut>${MI[k][1]}</p></div><span class=ar>›</span></article>`).join('')}</div><h3 class=sec>Resumen</h3>`;
+const heroH = () => `<section class=hero><div><span class=pill>Temporada ${new Date().getFullYear()}</span><h2>Organiza tu torneo.<br>Vive cada partido.</h2><p>Inscripciones, calendario, resultados y estadísticas de tus torneos de fútbol en un solo lugar.</p><div class=qa><button class=btn data-m=register>Crear cuenta gratis</button><button class="btn alt" data-m=login>Iniciar sesión</button></div></div><div class=hball>⚽</div></section>`;
+const home0 = V.home;
+V.home = () => (S.user ? menuH() : heroH()) + home0();
+const TABS = { home: 'Inicio', mi: 'Mi perfil', torneos: 'Torneos', equipos: 'Equipos', jugadores: 'Jugadores', stats: 'Estadísticas de jugador', activos: 'Torneos activos/inactivos', proximos: 'Próximos partidos', jugados: 'Partidos jugados', usuarios: 'Usuarios' };
+const PUB = ['home', 'torneos', 'equipos', 'jugadores', 'stats', 'activos', 'proximos', 'jugados'];
+const TB = { admin: ['home', 'torneos', 'equipos', 'jugadores', 'proximos', 'jugados', 'stats', 'usuarios'], dt: ['home', 'mi', 'torneos', 'proximos', 'jugados', 'stats'], jug: ['home', 'mi', 'torneos', 'proximos', 'jugados', 'stats'], arb: ['home', 'proximos', 'jugados', 'stats'], afi: PUB, '': PUB };
+const lbl = (k) => (k === 'mi' ? (rk() === 'dt' ? 'Mi equipo' : 'Mi perfil') : k === 'home' && S.user ? 'Menú principal' : k === 'proximos' && rk() === 'arb' ? 'Partidos por arbitrar' : TABS[k]);
+const RO = (n) => { const i = ROLES0.findIndex((x) => nm(x) === nm(n)); return i < 0 ? 99 : i; };
+const rolOn = (r) => nm(est(r.estado) ?? 'activo') === 'activo';
+const rolAct = () => S.roles.filter(rolOn).sort((a, b) => RO(a.nombre) - RO(b.nombre) || String(a.nombre).localeCompare(String(b.nombre)));
+const nUs = (r) => d('usuarios').filter((u) => u.rol_id == r.id && nm(est(u.estado) ?? 'activo') === 'activo').length;
+const rolesH = () => (rolAct().length ? `<div class=ra data-t=usuarios title="Gestionar usuarios y roles"><p class=sh>Roles activos</p>${rolAct().map((r) => `<div class="rar${RO(r.nombre) === 0 ? ' top' : ''}"><span>${esc(r.nombre)}</span><b>${nUs(r)}</b></div>`).join('')}</div>` : '');
+const INFO = [['about', 'about', 'Sobre nosotros'], ['who', 'who', 'Quiénes somos'], ['guide', 'guide', 'Cómo usar']];
+// Menú lateral: [grupo, [[pestaña, icono, texto], ...]]. Cambia según haya sesión y según el rol.
+const sideMenu = () => {
+  if (!S.user) return [['Explorar', [['home', 'home', 'Inicio'], ['torneos', 'torneos', 'Torneos'], ['proximos', 'proximos', 'Próximos partidos'], ['jugados', 'jugados', 'Partidos jugados'], ['stats', 'stats', 'Estadísticas']]], ['Tu cuenta', [['login', 'login', 'Iniciar sesión'], ['register', 'register', 'Registrarme']]], ['Información', INFO]];
+  const k = rk(), main = (TB[k] || PUB).map((t) => [t, t === 'mi' ? (k === 'dt' ? 'equipos' : 'perfil') : t, lbl(t)]);
+  if (k === 'admin' || k === 'dt') main.push(['mine', 'mine', k === 'dt' ? 'Mis torneos' : 'Torneos creados']);
+  return [['Principal', main], ['Cuenta', [['perfil', 'perfil', 'Mi cuenta'], ['notif', 'notif', 'Notificaciones'], ['config', 'config', 'Configuración']]], ['Información', INFO]];
+};
+const sideH = () => (S.user ? `<div class=rolchip data-r=${rk()}>${RN[rk()]}</div>` + (rk() === 'admin' ? rolesH() : '') : '')
+  + sideMenu().map(([g, it]) => `<p class=sh>${g}</p>` + it.map(([t, i, l]) => `<button class="${S.tab === t ? 'on' : ''}" data-t=${t} title="${l}">${ico(i)}<span>${l}</span></button>`).join('')).join('')
+  + (S.user ? `<p class=sh>Sesión</p><button data-out title="Cerrar sesión">${ico('logout')}<span>Cerrar sesión</span></button>` : '');
+const ICO = { home: '<path d="M3 11l9-8 9 8M5 10v10h14V10"/>', torneos: '<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0zM7 6H4v2a3 3 0 003 3M17 6h3v2a3 3 0 01-3 3"/>', activos: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="currentColor"/>', equipos: '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>', jugadores: '<circle cx="12" cy="7" r="3.5"/><path d="M5 21c0-4 3-7 7-7s7 3 7 7"/>', perfil: '<circle cx="12" cy="7" r="3.5"/><path d="M5 21c0-4 3-7 7-7s7 3 7 7"/>', proximos: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>', jugados: '<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>', usuarios: '<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3M14 9l2 2"/>', login: '<path d="M14 4h5a1 1 0 011 1v14a1 1 0 01-1 1h-5M10 8l4 4-4 4M14 12H3"/>', register: '<circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-4 3-6 7-6s7 2 7 6M19 8v6M16 11h6"/>', notif: '<path d="M6 8a6 6 0 0112 0c0 7 3 8 3 8H3s3-1 3-8M10 21a2 2 0 004 0"/>', logout: '<path d="M10 4H5a1 1 0 00-1 1v14a1 1 0 001 1h5M16 8l4 4-4 4M20 12H9"/>', stats: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>', mine: '<path d="M9 4h6v3H9zM6 5H5a1 1 0 00-1 1v14a1 1 0 001 1h14a1 1 0 001-1V6a1 1 0 00-1-1h-1M8 12h8M8 16h5"/>', config: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>', about: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7v.5"/>', who: '<circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-4 3-6 7-6s7 2 7 6M17 5a3 3 0 010 6M22 20c0-3-2-5-4-5.5"/>', guide: '<path d="M4 5a2 2 0 012-2h13v16H6a2 2 0 00-2 2zM4 19V5M8 8h7"/>' };
+const ico = (k) => `<svg class=ic viewBox="0 0 24 24" width=18 height=18 fill=none stroke=currentColor stroke-width=2 stroke-linecap=round stroke-linejoin=round>${ICO[k] || ''}</svg>`;
+
+function render() {
+  if (S.user && ['login', 'register'].includes(S.tab)) S.tab = 'home';
+  if (S.user && TABS[S.tab] && !(TB[rk()] || PUB).includes(S.tab)) S.tab = 'home';
+  const au = ['login', 'register'].includes(S.tab);
+  $('#tabs').classList.toggle('hide', au); $('#title').classList.toggle('hide', au);
+  $('#tabs').innerHTML = (TB[rk()] || PUB).map((k) => `<button class="tab ${S.tab === k ? 'on' : ''}" data-t=${k}>${lbl(k)}</button>`).join('');
+  $('#sn').innerHTML = sideH();
+  $('#title').textContent = lbl(S.tab) || { notif: 'Notificaciones', mine: ' Torneos creados', perfil: ' Perfil', config: ' Configuración', about: ' Sobre nosotros', who: ' Quiénes somos', guide: ' Guía rápida' }[S.tab];
+  $('#view').innerHTML = V[S.tab]();
+}
+function renderUser() {
+  const u = S.user;
+  $('#user').innerHTML = u
+    ? `<button id=ub class=ubtn><span class=av>${esc(u.nombre.charAt(0).toUpperCase())}</span>${esc(u.nombre)} <small class=rb>${RN[rk()]}</small> ▾</button><div id=um class="um hide"><button data-t=perfil>Perfil</button><button data-t=config>Configuración</button><button data-t=notif>Notificaciones</button><p>Rol: <span class=bd>${RN[rk()]}</span></p>${isAdmin() ? `<label>Cambiar de rol (vista)<select id=as class=sel><option value="">Administrador</option>${['Director técnico', 'Jugador', 'Árbitro', 'Aficionado'].map((n) => `<option ${S.as === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label>` : ''}<button data-out>Cerrar sesión</button></div>`
+    : '<button class=btn data-m=login>Iniciar sesión</button><button class="btn alt" data-m=register>Registrarse</button>';
+}
+const ui = () => { renderUser(); render(); };
+
+// ====== Eventos ======
+document.addEventListener('click', async (e) => {
+  const cv = e.target.closest('[data-v]');
+  if (cv && !e.target.closest('button,a,input,select')) { e.preventDefault(); const [en, id] = cv.dataset.v.split(':'); openDetail(en, id); return; }
+  const t = e.target.closest('[data-t],[data-m],[data-x],[data-xd],[data-out],[data-a],[data-e],[data-del],[data-i],[data-p],[data-mkroles],[data-eye],[data-pf],[data-cfg],#burger,#ub');
+  if (!t) { if (!e.target.closest('#um')) $('#um')?.classList.add('hide'); return; }
+  e.preventDefault();
+  if (t.dataset.t) { S.tab = t.dataset.t; scrollTo(0, 0); if (S.tab === 'notif' && S.user) { try { S.d.notificaciones = (await api('/notificaciones')).filter((n) => n.usuario_id == S.user.id); } catch {} } $('#um')?.classList.add('hide'); document.body.classList.remove('open'); render(); }
+  else if (t.dataset.m) { S.tab = t.dataset.m; render(); }
+  else if (t.dataset.e) { const [en, id] = t.dataset.e.split(':'); $('#dd').close(); openForm(en, id); }
+  else if (t.dataset.i) {
+    const tid = +t.dataset.i;
+    if (rk() === 'admin') { $('#dd').close(); openForm('inscripciones', 'new', { torneo_id: tid, fecha_inscripcion: hoy, estado: 'activa' }); }
+    else { try { await api('/inscripciones', { method: 'POST', body: { torneo_id: tid, equipo_id: miEq().id, fecha_inscripcion: hoy, estado: 'activa' } }); await reload(); render(); if ($('#dd').open) openDetail('torneos', tid); toast('Equipo inscrito en el torneo'); } catch (x) { toast(Object.values(x.errors || {})[0]?.[0] || x.message || 'No se pudo inscribir'); } }
+  }
+  else if (t.dataset.pf) openPerfil(t.dataset.pf);
+  else if (t.dataset.cfg === 'side') { document.body.classList.toggle(innerWidth < 800 ? 'open' : 'mini'); render(); }
+  else if (t.dataset.cfg === 'reset') { if (arm(t)) { LS.removeItem('mockdb'); logout(true); location.reload(); } }
+  else if (t.dataset.eye !== undefined) { const i = t.previousElementSibling; i.type = i.type === 'password' ? 'text' : 'password'; }
+  else if (t.dataset.p) { $('#dd').close(); openForm('partidos', 'new', { torneo_id: +t.dataset.p }); }
+  else if (t.dataset.mkroles !== undefined) { for (const n of ROLES0) if (!S.roles.some((r) => nm(r.nombre) === nm(n))) { try { await api('/roles', { method: 'POST', body: { nombre: n, descripcion: n, estado: 'activo' } }); } catch {} } await loadAdmin(); render(); toast('Roles creados'); }
+  else if (t.dataset.del) { const [en, id] = t.dataset.del.split(':'); if (arm(t)) { try { const rr = en === 'inscripciones' ? d(en).find((x) => x.id == id) : null; await api('/' + en + '/' + id, { method: 'DELETE' }); $('#dd').close(); await reload(); render(); if (rr) openDetail('torneos', rr.torneo_id); toast('Eliminado'); } catch (x) { toast(x.message || 'No se pudo eliminar'); } } }
+  else if (t.dataset.x !== undefined) $('#dlg').close();
+  else if (t.dataset.xd !== undefined) $('#dd').close();
+  else if (t.dataset.a) { S.act = +t.dataset.a; render(); }
+  else if (t.dataset.out !== undefined) logout();
+  else if (t.id === 'burger') document.body.classList.toggle(innerWidth < 800 ? 'open' : 'mini');
+  else if (t.id === 'ub') {
+    if (!S.roles.length) { try { S.roles = await api('/roles'); renderUser(); } catch {} }
+    $('#um').classList.toggle('hide');
+  }
+});
+document.addEventListener('input', (e) => { if (e.target.id === 'q') { S.q = e.target.value; $('#gj').innerHTML = jCards(); } });
+document.addEventListener('change', async (e) => {
+  const el = e.target;
+  if (el.id === 'as') { S.as = el.value || null; S.tab = 'home'; ui(); }
+  else if (el.dataset.ur) {
+    const u = d('usuarios').find((x) => x.id == el.dataset.ur);
+    try { await api('/usuarios/' + u.id, { method: 'PUT', body: { rol_id: +el.value, nombre: u.nombre, apellido: u.apellido, email: u.email, telefono: u.telefono, estado: u.estado } }); await loadAdmin(); render(); toast('Rol actualizado'); }
+    catch (x) { toast(Object.values(x.errors || {})[0]?.[0] || x.message || 'No se pudo cambiar el rol'); }
+  }
+});
+
+// ====== Detección automática de la dirección de la API ======
+async function findApi() {
+  const dir = location.href.split(/[?#]/)[0].replace(/[^/]*$/, '');
+  const c = [...new Set([window.CRONO_API, dir + 'api', location.origin + '/api', 'http://127.0.0.1:8000/api', 'http://localhost:8000/api'].filter((u) => u && /^https?:/.test(u)))];
+  for (const u of c) { try { const r = await fetch(u + '/torneos', { headers: { Accept: 'application/json' } }); if (r.ok && (r.headers.get('content-type') || '').includes('json')) return u; } catch {} }
+  return null;
+}
+// ====== Arranque ======
+$('#ct').innerHTML = CONTACTOS.map(([n, u, c, d]) => `<a href="${u}" target=_blank rel=noopener title="${n}"><b class=ci style="background:${c}"><svg viewBox="0 0 24 24" width=16 height=16 fill=#fff><path d="${d}"/></svg></b><span>${n}</span></a>`).join('');
+$('#toast').classList.add('hide');
+(async () => {
+  ui(); $('#view').innerHTML = '<p class=empty><span class=spin></span> Cargando…</p>';
+  const k = ['torneos', 'equipos', 'jugadores', 'partidos', 'estadisticas-jugadores', 'inscripciones'];
+  const found = await findApi(); if (found) API = found;
+  const rs = await Promise.allSettled(k.map((x) => api('/' + x)));
+  rs.forEach((r, i) => (S.d[k[i]] = r.status === 'fulfilled' ? r.value : []));
+  if (rs.every((r) => r.status === 'rejected' && (r.reason?.net || r.reason?.status === 404))) { S.live = 0; await reload(); }
+  else S.live = 1;
+  if (S.token) api('/auth/me').then(async (u) => { S.user = u; save(); await loadAdmin(); ui(); }).catch(() => {});
+  render();
+})();
+
+</script>
+</body></html>

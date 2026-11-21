@@ -14,6 +14,7 @@ class StoreJugadorRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'usuario_id' => ['nullable', 'integer', 'exists:usuarios,id'],
             'equipo_id' => [
                 'required',
                 'integer',

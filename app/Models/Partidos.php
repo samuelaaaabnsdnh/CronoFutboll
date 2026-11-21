@@ -15,6 +15,7 @@ class Partidos extends Model
     protected $table = 'partidos';
 
     protected $fillable = [
+        'torneo_id',
         'equipo_local_id',
         'equipo_visitante_id',
         'fecha',
@@ -30,6 +31,11 @@ class Partidos extends Model
         return [
             'fecha' => 'date',
         ];
+    }
+
+    public function torneo(): BelongsTo
+    {
+        return $this->belongsTo(Torneos::class, 'torneo_id');
     }
 
     public function equipoLocal(): BelongsTo

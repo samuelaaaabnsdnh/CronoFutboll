@@ -20,10 +20,6 @@ class Inscripciones extends Model
         'equipo_id',
     ];
 
-    protected $casts = [
-        'estado'=> 'boolean'
-    ];
-
     public function Torneos()
     {
         return $this->belongsTo(Torneos::class);

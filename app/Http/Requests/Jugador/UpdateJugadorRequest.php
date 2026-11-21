@@ -15,6 +15,7 @@ class UpdateJugadorRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'usuario_id' => ['sometimes', 'nullable', 'integer', 'exists:usuarios,id'],
             'equipo_id' => [
                 'sometimes',
                 'required',

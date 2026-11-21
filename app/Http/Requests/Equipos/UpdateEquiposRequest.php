@@ -16,6 +16,7 @@ class UpdateEquiposRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'usuario_id' => 'nullable|integer|exists:usuarios,id',
             'nombre'     => [
                 'required', 'string', 'max:100',
                 Rule::unique('equipos', 'nombre')->ignore($this->route('equipo')),
